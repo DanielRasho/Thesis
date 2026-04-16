@@ -10,10 +10,15 @@
 #set page(
   paper: "a4",
   number-align: center,
+  numbering: none
 )
 
 #set text(
   size: 11pt,
+)
+
+#set heading(
+  numbering: "1.a."
 )
 
 // ============ STYLES
@@ -24,26 +29,38 @@
     ] else [
         #it
     ]
-
 // ============ COVER
 
 #align(center)[
+  #text(size: 16pt)[#smallcaps()[Universidad del valle de guatemala\
+  Facultad de Ingeniería]]
+
+  #v(30pt)
+
+  #image("media/UVG-Logo.jpg", width: 45%)
+
+  #v(30pt)
+
   #title()
 
-  #v(12pt)
+  #v(50pt)
 
-  Daniel Alfredo Rayo Roldán  
-
-  Universidad del Valle de Guatemala
+  
+  Trabajo de graduación presentado por Daniel Alfredo Rayo Roldán para optar al grado 
+  académico en Ingeniería en Ciencias de la Computación y Tecnologías de la Información
 ]
 
-#v(20pt)
-
+#pagebreak()
 // ============ CONTENT
 
-= Abstract
+#outline()
 
-#lorem(50)
+#set page(
+  paper: "a4",
+  number-align: center,
+  numbering: "1"
+)
+#counter(page).update(1)
 
 = Resumen
 
@@ -52,6 +69,20 @@
 = Introducción
 
 #lorem(120)
+
+= Objetivos
+
+== General
+
+#lorem(30)
+
+== Específicos
+
++ sadfasdf
++ sdfasdf
++ asdfsdf
+
+#pagebreak()
 
 = Marco Teórico
 

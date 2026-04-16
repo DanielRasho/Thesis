@@ -1,0 +1,411 @@
+@article{aqasizadeExperimentalAssessmentContainers2024,
+  title = {Experimental {{Assessment}} of {{Containers Running}} on {{Top}} of {{Virtual Machines}}},
+  author = {Aqasizade, Hossein and Ataie, | Ehsan and Bastam, Mostafa},
+  date = {2024-01},
+  url = {http://arxiv.org/abs/2401.07539},
+  abstract = {Over the past two decades, the cloud computing paradigm has gradually attracted more popularity due to its efficient resource usage and simple service access model. Virtualization technology is the fundamental element of cloud computing that brings several benefits to cloud users and providers, such as workload isolation, energy efficiency, server consolidation, and cost reduction. This paper examines the combination of operating system-level virtualization (containers) and hardware-level virtualization (virtual machines). To this end, the performance of containers running on top of virtual machines is experimentally compared with standalone virtual machines and containers based on different hardware resources, including the processor, main memory, disk, and network in a real testbed by running the most commonly used benchmarks. Paravirtualization and full virtualization as well as type 1 and type 2 hypervisors are covered in this study. In addition, three prevalent containerization platforms are examined.},
+  keywords = {Cloud Computing,Container,Performance Evaluation,Virtual Machine}
+}
+
+@article{bedoUnifyingPackageManagers2020,
+  title = {Unifying Package Managers, Workflow Engines, and Containers: {{Computational}} Reproducibility with {{BioNix}}},
+  author = {Bedo, Justin and Stefano, Leon Di and Papenfuss, Anthony T.},
+  date = {2020-11},
+  journaltitle = {GigaScience},
+  volume = {9},
+  number = {11},
+  eprint = {33205815},
+  eprinttype = {pubmed},
+  pages = {1--12},
+  publisher = {Oxford Academic},
+  issn = {2047217X},
+  doi = {10.1093/GIGASCIENCE/GIAA121},
+  url = {https://dx.doi.org/10.1093/gigascience/giaa121},
+  abstract = {Motivation: A challenge for computational biologists is to make our analyses reproducible-i.e. to rerun, combine, and share, with the assurance that equivalent runs will generate identical results. Current best practice aims at this using a combination of package managers, workflow engines, and containers. Results: We present BioNix, a lightweight library built on the Nix deployment system. BioNix manages software dependencies, computational environments, and workflow stages together using a single abstraction: Pure functions. This lets users specify workflows in a clean, uniform way, with strong reproducibility guarantees.}
+}
+
+@misc{boersma1WHY20252025,
+  title = {(1) {{WHY}} 2025 - {{How}} to Make a {{Domain-Specific Language}} for Non-Devs (so They Don't Need {{AI}}) - {{YouTube}}},
+  author = {Boersma, Meinte},
+  date = {2025},
+  url = {https://www.youtube.com/watch?v=Y4pgOPjiCCg}
+}
+
+@article{burgDisnixToolsetDistributed2014,
+  title = {Disnix: {{A}} Toolset for Distributed Deployment},
+  author = {Burg, Sander Van Der and Dolstra, Eelco},
+  date = {2014-01},
+  journaltitle = {Science of Computer Programming},
+  volume = {79},
+  pages = {52--69},
+  publisher = {Elsevier},
+  issn = {0167-6423},
+  doi = {10.1016/J.SCICO.2012.03.006},
+  abstract = {The process of deploying a distributed system in a network of machines is often very complex, laborious and time-consuming, while it is hard to guarantee that the system will work as expected and that specific non-functional deployment requirements from the domain are supported. In this paper we describe the Disnix toolset, which provides system administrators or developers with automatic deployment of a distributed system in a network of machines from declarative specifications and offers properties such as complete dependencies, atomic upgrades and rollbacks to make this process efficient and reliable. Disnix has an extensible architecture, allowing the integration of custom modules to make the deployment more convenient and suitable for the domain in which the system is to be used. Disnix has been under development for almost four years and has been applied to several types of distributed systems, including an industrial case study. © 2011 Elsevier B.V. All rights reserved.},
+  keywords = {Distributed systems,Service-oriented systems,Software deployment}
+}
+
+@article{courtesFunctionalPackageManagement2013,
+  title = {Functional {{Package Management}} with {{Guix}}},
+  author = {Courtès, Ludovic},
+  date = {2013-05},
+  url = {https://arxiv.org/abs/1305.4584v1},
+  abstract = {We describe the design and implementation of GNU Guix, a purely functional package manager designed to support a complete GNU/Linux distribution. Guix supports transactional upgrades and roll-backs, unprivileged package management, per-user profiles, and garbage collection. It builds upon the low-level build and deployment layer of the Nix package manager. Guix uses Scheme as its programming interface. In particular, we devise an embedded domain-specific language (EDSL) to describe and compose packages. We demonstrate how it allows us to benefit from the host general-purpose programming language while not compromising on expressiveness. Second, we show the use of Scheme to write build programs, leading to "two-tier" programming system.},
+  keywords = {D11 [Software]: Applicative (Functional) Programming General Terms Languages,D45 [Operating Systems]: Reliability,D45 [Operating Systems]: System Programs and Utilities,Embedded domain-specific language,Management,Reliability Keywords Functional package management,Scheme}
+}
+
+@article{dolstraFutureNix2018,
+  title = {The {{Future}} of {{Nix}}},
+  author = {Dolstra, Eelco},
+  date = {2018},
+  url = {edolstra.github.io/talks/guix-feb-2018.pdf}
+}
+
+@article{dolstraNixOSPurelyFunctional2008,
+  title = {{{NixOS}}: {{A}} Purely Functional {{Linux}} Distribution},
+  author = {Dolstra, Eelco and Löh, Andres},
+  date = {2008-09},
+  journaltitle = {Proceedings of the ACM SIGPLAN International Conference on Functional Programming, ICFP},
+  pages = {367--378},
+  doi = {10.1145/1411204.1411255/SUPPL_FILE/P367-SLIDES.ZIP},
+  url = {https://dl.acm.org/doi/10.1145/1411204.1411255},
+  abstract = {Existing package and system configuration management tools suffer from an imperative model, where system administration actions such as upgrading packages or changes to system configuration files are stateful: they destructively update the state of the system. This leads to many problems, such as the inability to roll back changes easily, to run multiple versions of a package side-by-side, to reproduce a configuration deterministically on another machine, or to reliably upgrade a system. In this paper we show that we can overcome these problems by moving to \& purely functional system configuration model. This means that all static parts of a system (such as software packages, configuration files and system startup scripts) are built by pure functions and are immutable, stored in a way analogously to a heap in a purely function language. We have implemented this model in NixOS, a non-trivial Linux distribution that uses the Nix package manager to build the entire system configuration from a purely functional specification. Copyright © 2008 ACM.},
+  isbn = {9781595939197},
+  keywords = {General terms experimentation,Languages,Reliability}
+}
+
+@article{fagerholmDeveloperExperienceConcept2012,
+  title = {Developer Experience: {{Concept}} and Definition},
+  author = {Fagerholm, Fabian and Münch, Jürgen},
+  date = {2012},
+  journaltitle = {2012 International Conference on Software and System Process, ICSSP 2012 - Proceedings},
+  pages = {73--77},
+  doi = {10.1109/ICSSP.2012.6225984},
+  url = {https://www.researchgate.net/publication/254040906_Developer_Experience_Concept_and_Definition},
+  abstract = {New ways of working such as globally distributed development or the integration of self-motivated external developers into software ecosystems will require a better and more comprehensive understanding of developers' feelings, perceptions, motivations and identification with their tasks in their respective project environments. User experience is a concept that captures how persons feel about products, systems and services. It evolved from disciplines such as interaction design and usability to a much richer scope that includes feelings, motivations, and satisfaction. Similarly, developer experience could be defined as a means for capturing how developers think and feel about their activities within their working environments, with the assumption that an improvement of the developer experience has positive impacts on characteristics such as sustained team and project performance. This article motivates the importance of developer experience, sketches related approaches from other domains, proposes a definition of developer experience that is derived from similar concepts in other domains, describes an ongoing empirical study to better understand developer experience, and finally gives an outlook on planned future research activities. © 2012 IEEE.},
+  isbn = {9781467323529},
+  keywords = {Developer experience,high-performing teams,human factors,software development environment,software psychology}
+}
+
+@misc{fricklerhandwerkUsabilityStudiesDevelopment2022,
+  title = {Usability Studies - {{Development}} / {{Documentation}} - {{NixOS Discourse}}},
+  author = {{fricklerhandwerk}},
+  date = {2022},
+  url = {https://discourse.nixos.org/t/usability-studies/21404}
+}
+
+@article{giallorenzoVirtualizationCostsBenchmarking2021,
+  title = {Virtualization {{Costs}}: {{Benchmarking Containers}} and {{Virtual Machines Against Bare-Metal}}},
+  author = {Giallorenzo, Saverio and Mauro, Jacopo and Poulsen, Martin Gyde and Siroky, Filip},
+  date = {2021-09},
+  journaltitle = {SN Computer Science},
+  volume = {2},
+  number = {5},
+  pages = {404-},
+  publisher = {Springer},
+  issn = {26618907},
+  doi = {10.1007/S42979-021-00781-8/METRICS},
+  url = {https://link.springer.com/article/10.1007/s42979-021-00781-8},
+  abstract = {DevOps advocates the usage of Virtualization Technologies (VT), such as Virtual Machines and Containers. However, it is complex to predict how the usage of a given VT will impact on the performance of an application. In this paper, we present a collection of reference benchmarks that developers can use to orient when looking for the best-performing VT w.r.t their application profile. To gather our benchmarks in a resource-wise comprehensive and comparable way, we introduce VTmark: a semi-automatic open-source suite that assembles off-the-shelf tools for benchmarking the different resources used by applications (CPU, RAM, etc.). After performing a survey of VTs in the market, we use VTmark to report the benchmarks of 6 of the most widely adopted and popular ones, namely Docker, KVM, Podman, VMWare Workstation, VirtualBox, and Xen. To validate the accuracy of our reference benchmarks, we show how they correlate with the profile performance of a production-grade application ported and deployed on the considered VTs. Beyond our immediate results, VTmark let us shed light on some contradicting findings in the related literature and, by releasing VTmark , we provide DevOps with an open-source, extendable tool to assess the (resource-wise) costs of VTs.},
+  keywords = {Benchmarking,Cloud deployment,Virtualization}
+}
+
+@article{gibbPackageManagersCarte2026,
+  title = {Package {{Managers}} à La {{Carte}}: {{A Formal Model}} of {{Dependency Resolution}}},
+  author = {Gibb, Ryan and Ferris, Patrick and Allsopp, David and Gazagnaire, Thomas and Madhavapeddy, Anil},
+  date = {2026-02},
+  journaltitle = {Proceedings of the ACM on Programming Languages},
+  volume = {-},
+  url = {https://arxiv.org/abs/2602.18602v1},
+  abstract = {Package managers are legion. Every programming language and operating system has its own solution, each with subtly different semantics for dependency resolution. This fragmentation prevents multilingual projects from expressing precise dependencies across language ecosystems; it leaves external system and hardware dependencies implicit and unversioned; it obscures security vulnerabilities that lie in the full dependency graph. We present the \textbackslash textit\{Package Calculus\}, a formalism for dependency resolution that unifies the core semantics of diverse package managers. Through a series of formal reductions, we show how this core is expressive enough to model the diversity that real-world package managers employ in their dependency expression languages. By using the Package Calculus as the intermediate representation of dependencies, we enable translation between distinct package managers and resolution across ecosystems.},
+  keywords = {cs.PL,cs.SE}
+}
+
+@article{gomezImpactFunctionalPackage2020,
+  title = {Impact of {{Functional Package Manager}} over a {{Non-Traditional High Performance Computing System}}},
+  author = {Gomez, Carlos Eduardo and H, Carlos J. Barrios and Richard, Olivier},
+  date = {2020-08},
+  journaltitle = {2020 IEEE Colombian Conference on Communications and Computing, COLCOM 2020 - Proceedings},
+  publisher = {{Institute of Electrical and Electronics Engineers Inc.}},
+  doi = {10.1109/COLCOM50121.2020.9219768},
+  url = {https://www.researchgate.net/publication/347484292_Impact_of_Functional_Package_Manager_Over_a_Non-Traditional_High_Performance_Computing_System},
+  abstract = {Nowadays, practitioners in both industrial and academic circles are using embedded systems that interact with each other to tackle high performance computing workloads, but with individually less capable devices. Smart cities, autonomous machines and agriculture applications are some examples of these systems working in different fields. These systems run several applications that we want to handle in a simple way. There are several approaches for application management and deployment: Containers, virtualization and package manager are some examples. In order to monitor the performance of these systems, we evaluated the impact of the package manager method in an embedded systems test bench. We presented an experiment using an 8 NVIDIA Jetson TX1 cluster with Nix package manager and Jacobi Benchmark, showing that this method has a negligible impact performance on execution time against its native version.},
+  isbn = {9781728187150},
+  keywords = {Embedded Systems,Functional Package Manager,High Performance Computing}
+}
+
+@misc{gonzalesHardPartTypechecking2022,
+  title = {The Hard Part of Type-Checking {{Nix}}},
+  author = {Gonzáles, Gabriella},
+  date = {2022},
+  url = {https://haskellforall.com/2022/03/the-hard-part-of-type-checking-nix}
+}
+
+@article{hudakConceptionEvolutionApplication1989,
+  title = {Conception, Evolution, and Application of Functional Programming Languages},
+  author = {Hudak, Paul},
+  date = {1989-09},
+  journaltitle = {ACM Computing Surveys (CSUR)},
+  volume = {21},
+  number = {3},
+  pages = {359--411},
+  publisher = {ACMPUB27New York, NY, USA},
+  issn = {15577341},
+  doi = {10.1145/72551.72554},
+  url = {https://dl.acm.org/doi/10.1145/72551.72554},
+  abstract = {The foundations of functional programming languages are examined from both historical and technical perspectives. Their evolution is traced through several critical periods: early work on lambda ca...},
+  keywords = {Data abstraction,higher-order functions,lazy evaluation,nonprocedural languages,referential transparency,types,very high-level languages}
+}
+
+@article{kuusinenAreSoftwareDevelopers2016,
+  title = {Are {{Software Developers Just Users}} of {{Development Tools}}? {{Assessing Developer Experience}} of a {{Graphical User Interface Designer}}},
+  author = {Kuusinen, Kati},
+  date = {2016-08},
+  journaltitle = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+  volume = {LNCS-9856},
+  pages = {215--233},
+  publisher = {Springer International Publishing},
+  issn = {16113349},
+  doi = {10.1007/978-3-319-44902-9_14},
+  url = {https://inria.hal.science/hal-01647699 https://inria.hal.science/hal-01647699/document},
+  abstract = {Software developers use software products to design and develop new software products for others to use. Research has introduced a concept of developer experience inspired by the concept of user experience but appreciating also the special characteristics of software development context. It is unclear what the experiential components of developer experience are and how it can be measured. In this paper we address developer experience of Vaadin Designer, a graphical user interface designer tool in terms of user experience, intrinsic motivation, and flow state experience. We surveyed 18 developers using AttrakDiff, flow state scale, intrinsic motivation inventory and our own DEXI scale and compare those responses to developers’ overall user experience assessment using Mann-Whitney U test. We found significant differences in motivational and flow state factors between groups who assessed the overall user experience either bad or good. Based on our results we discuss the factors that construe developer experience.},
+  isbn = {9783319449012}
+}
+
+@article{lerouxPsychologicalPerspectivesEmpowerment2019,
+  title = {Psychological {{Perspectives}} on {{Empowerment}}},
+  author = {Leroux, Jesper},
+  date = {2019},
+  pages = {130},
+  publisher = {Nova Science Publishers, Incorporated},
+  url = {https://www.researchgate.net/publication/337654009_Empowered_or_Disempowered_An_Analysis_of_Usability_Practitioners'_Interventions_in_Open_Source_Projects},
+  abstract = {Intro – Contents – Preface – Chapter 1 – Empowered or Disempowered? An Analysis of Usability Practitioners' Interventions in Open Source Projects – Abstract – 1. Introduction – 2. Perspectives on Empowerment – 2.1. Mainstream Perspectives on Power and Empowerment – 2.2. Critical Perspectives on Power and Empowerment – 3. Empowerment in Open Source Software Development – 3.1. Characterizing OSS Development – 3.2. Usability in OSS Development – 3.3. Theoretical Lens on Empowerment in This Chapter – 4. Research Design – 5. Empirical Illustrations – 5.1. Meaning},
+  isbn = {978-1-53616-646-0}
+}
+
+@article{lingayatPerformanceEvaluationDeploying2018,
+  title = {Performance {{Evaluation}} for {{Deploying Docker Containers}} on {{Baremetal}} and {{Virtual Machine}}},
+  author = {Lingayat, Ashish and Badre, Ranjana R. and Gupta, Anil Kumar},
+  date = {2018-10},
+  journaltitle = {Proceedings of the 3rd International Conference on Communication and Electronics Systems, ICCES 2018},
+  pages = {1019--1023},
+  publisher = {{Institute of Electrical and Electronics Engineers Inc.}},
+  doi = {10.1109/CESYS.2018.8723998},
+  abstract = {The current virtualization technology induces an overhead in their performance. The benefits of Linux containers led to their development and increasing its usage among administrators and developers. Docker container offers an isolated space for running the application in the containerized environment. Containers are known for starting applications in quicker time as compared to those running on baremetal or virtualized environment. For calculating the startup time of containerized applications, we are using a benchmark based on Docker containers. This benchmark is capable of calculating the startup time of Docker application running services. The services can be Apache web server, Redis, PostgreSQL, and many others. The proposed system calculates the startup time for Docker containers running the Apache web server in baremetal, and virtual machine (KVM). The test will let the users know about the performance of Docker applications in both the environments. The analysis will help them in deciding the environment for working with Docker application to obtain maximum performance. The experimental setup of the proposed system shows that running containerized application on baremetal will improve the startup time than a virtual machine. The performance on baremetal is enhanced by about 50\% than a virtual machine.},
+  isbn = {9781538647653},
+  keywords = {Benchmark,Docker,Linux containers,virtualization}
+}
+
+@article{llerenaHowImproveUsability2025,
+  title = {How to {{Improve Usability}} in {{Open-Source Software Projects}}? {{An Analysis}} of {{Evaluation Techniques Through}} a {{Multiple Case Study}}},
+  author = {Llerena, Lucrecia and Castro, John W. and Llerena, Rosa and Rodríguez, Nancy},
+  date = {2025-01},
+  journaltitle = {Informatics 2025, Vol. 12, Page 12},
+  volume = {12},
+  number = {1},
+  pages = {12},
+  publisher = {Multidisciplinary Digital Publishing Institute},
+  issn = {2227-9709},
+  doi = {10.3390/INFORMATICS12010012},
+  url = {https://www.mdpi.com/2227-9709/12/1/12/htm https://www.mdpi.com/2227-9709/12/1/12},
+  abstract = {Open-source software has experienced steady growth, driving increased research. However, open-source communities still need standardized processes to ensure software quality, and their characteristics make it challenging to adopt many usability techniques from human–computer interaction directly. Our study aims to adapt and evaluate the feasibility of three usability evaluation techniques—cognitive walkthrough, formal usability testing, and thinking aloud—across three open-source projects (Code::Blocks, Freeplane, and Scribus) from the development team’s perspective. We participated as volunteers in these projects, employing a multiple case study method. We found that usability techniques were not systematically adopted, and procedures specific to open-source projects were lacking. We also identified adverse conditions, such as limited user participation, that hindered adoption. We proposed adaptations to each technique and formalized procedures to address these challenges and apply them in open-source contexts. Additionally, we developed a framework for integrating usability evaluation into OSS projects. To address this, we detailed our framework’s phases, tasks, and artifacts to ensure reusability and adaptability across OSS contexts, providing practical steps for implementation and future validations. In conclusion, usability techniques must be adapted for open-source software, considering the projects’ unique characteristics and philosophy. Although obstacles exist, such as user participation, applying adapted usability techniques in open-source projects is feasible.},
+  keywords = {cognitive walkthrough,formal usability testing,open,source software,thinking aloud,usability techniques}
+}
+
+@article{macdonaldWhatDoesIt2014,
+  title = {What Does It Mean for a System to Be Useful? {{An}} Exploratory Study of Usefulness},
+  author = {MacDonald, Craig M. and Atwood, Michael E.},
+  date = {2014},
+  journaltitle = {Proceedings of the Conference on Designing Interactive Systems: Processes, Practices, Methods, and Techniques, DIS},
+  pages = {885--894},
+  publisher = {Association for Computing Machinery},
+  doi = {10.1145/2598510.2598600},
+  url = {https://dl.acm.org/doi/10.1145/2598510.2598600},
+  abstract = {HCI has always focused on designing useful and usable interactive systems, but usability has dominated the field while research on usefulness has been largely absent. With user experience (UX) emerging as a dominant paradigm, it is necessary to consider the meaning of usefulness for modern computing contexts. This paper describes the results of an exploratory study of usefulness and its relation to contextual and experiential factors. The results show that a system's usefulness is shaped by the context in which it is used, usability is closely linked to usefulness, usefulness may have both pragmatic and hedonic attributes, and usefulness is critical in defining users' overall evaluation of a system (i.e., its goodness). We conclude by discussing the implications of this research and describing plans for extending our understanding of usefulness in other settings. Copyright © 2014 ACM.},
+  isbn = {9781450329026},
+  keywords = {Evaluation,Usability,Usefulness,UX}
+}
+
+@article{malkaDoesFunctionalPackage2025,
+  title = {Does {{Functional Package Management Enable Reproducible Builds}} at {{Scale}}? {{Yes}}},
+  author = {Malka, Julien and Zacchiroli, Stefano and Zimmermann, Théo},
+  date = {2025-05},
+  journaltitle = {Proceedings - 2025 IEEE/ACM 22nd International Conference on Mining Software Repositories, MSR 2025},
+  pages = {775--787},
+  publisher = {{Institute of Electrical and Electronics Engineers Inc.}},
+  doi = {10.1109/MSR66628.2025.00115},
+  url = {http://arxiv.org/abs/2501.15919 http://dx.doi.org/10.1109/MSR66628.2025.00115},
+  abstract = {Reproducible Builds (R-B) guarantee that rebuilding a software package from source leads to bitwise identical artifacts. R-B is a promising approach to increase the integrity of the software supply chain, when installing open source software built by third parties. Unfortunately, despite success stories like high build reproducibility levels in Debian packages, uncertainty remains among field experts on the scalability of R-B to very large package repositories. In this work, we perform the first large-scale study of bitwise reproducibility, in the context of the Nix functional package manager, rebuilding 709 816 packages from historical snapshots of the nixpkgs repository, the largest cross-ecosystem open source software distribution, sampled in the period 2017-2023. We obtain very high bitwise reproducibility rates, between 69 and 91\% with an upward trend, and even higher rebuildability rates, over 99\%. We investigate unreproducibility causes, showing that about 15\% of failures are due to embedded build dates. We release a novel dataset with all build statuses, logs, as well as full ”diffoscopes”: recursive diffs of where unreproducible build artifacts differ.},
+  keywords = {functional package management,reproducibility,reproducible builds,security,software supply chain}
+}
+
+@article{matsumotoImprovingUserExperience2022,
+  title = {Improving {{User Experience}} of {{C Programming Language Learning System}} for {{Beginners}} in {{Error Correction Learning}}},
+  author = {Matsumoto, Shimpei and Yamagishi, Shuichi and Kaida, Kosuke},
+  date = {2022-01},
+  journaltitle = {Information Engineering Express},
+  volume = {8},
+  number = {1},
+  pages = {1},
+  publisher = {International Institute of Applied Informatics},
+  issn = {2185-9892},
+  doi = {10.52731/IEE.V8.I1.527},
+  url = {https://iaiai.org/journals/index.php/IEE/article/view/527},
+  abstract = {This paper aims to improve user experience of C language development environment for beginners, Hello C, which our previous researches have developed. To examine effective user experience, we conducted two kinds of experiments. The one was the experiment with the learning task of fixing syntax errors to evaluate the method to convey error messages. This experimental result suggested that the indication of the error message like scripting language may be effective even C language learning. Next, we also conducted the other experiment with the learning task of fixing I/O errors and examined the effectiveness to convey the closeness to the correct answer. This experimental result suggested that utilizing the concept of small steps could support acquiring the skill of programming.},
+  keywords = {beginners,C language,development environment,User experience}
+}
+
+@article{mernikWhenHowDevelop2005,
+  title = {When and How to Develop Domain-Specific Languages},
+  author = {Mernik, Marjan and Cwi, Jan Heering and Sloane, Anthony M. and Nl, Jan Heering@cwi and Sloane, ; A. M.},
+  date = {2005},
+  journaltitle = {ACM Computing Surveys},
+  volume = {37},
+  number = {4},
+  pages = {316--344},
+  publisher = {Association for Computing Machinery},
+  issn = {03600300},
+  doi = {10.1145/1118890.1118892},
+  abstract = {Domain-specific languages (DSLs) are languages tailored to a specific application domain. They offer substantial gains in expressiveness and ease of use compared with general-purpose programming languages in their domain of application. DSL development is hard, requiring both domain knowledge and language development expertise. Few people have both. Not surprisingly, the decision to develop a DSL is often postponed indefinitely, if considered at all, and most DSLs never get beyond the application library stage. Although many articles have been written on the development of particular DSLs, there is very limited literature on DSL development methodologies and many questions remain regarding when and how to develop a DSL. To aid the DSL developer, we identify patterns in the decision, analysis, design, and implementation phases of DSL development. Our patterns improve and extend earlier work on DSL design patterns. We also discuss domain analysis tools and language development systems that may help to speed up DSL development. Finally, we present a number of open problems. © 2005 ACM.},
+  keywords = {Application language,domain analysis,Domain analysis,Domain-specific language,language development system,Language development system}
+}
+
+@article{myersImprovingAPIUsability2016,
+  title = {Improving {{API}} Usability},
+  author = {Myers, Brad A. and Stylos, Jeffrey},
+  date = {2016-05},
+  journaltitle = {Communications of the ACM},
+  volume = {59},
+  number = {6},
+  pages = {62--69},
+  publisher = {ACMPUB27New York, NY, USA},
+  issn = {15577317},
+  doi = {10.1145/2896587},
+  url = {https://dl.acm.org/doi/10.1145/2896587},
+  abstract = {Human-centered design can make application programming interfaces easier for developers to use.}
+}
+
+@article{myersProgrammersAreUsers2016,
+  title = {Programmers {{Are Users Too}}: {{Human-Centered Methods}} for {{Improving Programming Tools}}},
+  author = {Myers, Brad A. and Ko, Andrew J. and Latoza, Thomas D. and Yoon, Youngseok},
+  date = {2016-07},
+  journaltitle = {Computer},
+  volume = {49},
+  number = {7},
+  pages = {44--52},
+  publisher = {IEEE},
+  issn = {00189162},
+  doi = {10.1109/MC.2016.200},
+  url = {https://dl.acm.org/doi/10.1109/MC.2016.200},
+  abstract = {Human-centered methods can help researchers better understand and meet programmers' needs. Because programming is a human activity, many of these methods can be used without change. However, some p...},
+  keywords = {A/B testing,contextual inquiry,data mining,end-user software engineering,evaluation studies,exploratory lab studies,HCI,human-centered computing,human-computer interaction,log analysis,natural-programming elicitation,rapid prototyping,software development,software engineering,software psychology,studies of program constructs,think-aloud usability evaluation,user interfaces}
+}
+
+@article{nicholsUsabilityOpensourceSoftware2001,
+  title = {Usability and Open-Source Software Development},
+  author = {Nichols, David M. and Thomson, Kirsten and Yeates, Stuart A.},
+  date = {2001},
+  journaltitle = {Proceedings - Symposium on Computer Human Interaction, CHINZ 2001},
+  pages = {49--54},
+  doi = {10.1145/2331812.2331822},
+  url = {https://dl.acm.org/doi/10.1145/2331812.2331822},
+  abstract = {Open-source is becoming an increasingly popular software development method. This paper reports a usability study of the open-source Greenstone Digital Library collection-building software. The problems highlighted by the study are analysed to identify their likely source within the social context of Greenstone's development environment. We discuss how characteristics of open-source software development influence the usability of resulting software products. © 2001 ACM.},
+  isbn = {0473075598}
+}
+
+@article{parrachoDidntFindWhat2023,
+  title = {I Didn’t Find What {{I}} Wanted - {{How}} Do {{Developers Consume Information}} in {{Software Ecosystems Portals}}?},
+  author = {Parracho, Thiago de Moura and Zacarias, Rodrigo Oliveira and Seruffo, Marcos César da Rocha and family=Santos, given=Rodrigo Pereira, prefix=dos, useprefix=false},
+  date = {2023-05},
+  journaltitle = {ACM International Conference Proceeding Series},
+  volume = {1},
+  pages = {143--150},
+  publisher = {Association for Computing Machinery},
+  doi = {10.1145/3592813.3592899},
+  url = {https://dl.acm.org/doi/10.1145/3592813.3592899},
+  abstract = {Context: Web portals play an important role within a Software Ecosystem (SECO), as they facilitate access to information and interaction among software developers over a common technological platform. Problem: Developers’ dissatisfaction with how information is presented on the SECO portal affects their engagement within the platform, causing a migration to consume information and interact in third-party channels, harming the SECO business model. Solution: This paper presents factors that influence developers’ search and information consumption on SECO technological platforms and suggestions that keystones can implement to increase engagement and transparency in their portals. IS Theory: This work was conceived under the Social Media Engagement Theory, regarding the transparency dimension in social interactions between users and platform technical resources. In this case, users are developers who seek knowledge about a SECO platform technology. Method: We conducted a survey with developers to understand their information consumption in SECO portals. Results were analyzed from quantitative and qualitative approaches. Summary of Results: From 50 responses, we identified three sets of categories associated with factors that influence developers on where to seek knowledge about a SECO technological platform (SECO portals or third-party channels) and we made three suggestions for keystones to increase engagement and transparency in their SECO portals. Contributions and Impact in the IS field: The main contribution is to favor developers’ engagement and transparency in information consumption and interaction within SECO portals. This study also contributes to the Grand Research Challenge “Transparency in Information Systems”.},
+  isbn = {9798400707599},
+  keywords = {Developer Experience,Engagement,Information Consumption,Software Ecosystems,Transparency}
+}
+
+@article{poltronieriUSADSLUSAbilityEvaluation2018,
+  title = {{{USA-DSL}}: {{USAbility}} Evaluation Framework for Domain-Specific Languages},
+  author = {Poltronieri, Ildevana and Zorzo, Avelino Francisco and Bernardino, Maicon and Campos, Marcia De Borba},
+  date = {2018-04},
+  journaltitle = {Proceedings of the ACM Symposium on Applied Computing},
+  pages = {2013--2021},
+  publisher = {Association for Computing Machinery},
+  doi = {10.1145/3167132.3167348},
+  url = {https://doi.org/10.1145/3167132.3167348},
+  abstract = {Software quality is a constant concern for software engineers. Hence, they are increasingly taking advantage of new methods to evaluate their products quality. For instance, the evaluation of languages developed for specific domains, which in the literature are known as Domain-Specific Languages (DSLs), is a growing concern. DSLs are languages used by different developers to solve problems of specific domains. Regarding the evaluation of these languages, several experimental studies that subjectively evaluate usability can be found in the literature, but few of them have taken advantage of applying Human-Computer Interaction (HCI) techniques. Therefore, the goal of this paper is to present a usability evaluation framework for DSLs, called Usa-DSL. In order to produce a first evaluation of the framework, we use a Focus Group method, in which seven subjects met to discuss our proposed framework. This discussion resulted in modifications of our initial proposal, which were incorporated in the final framework presented in this paper.},
+  isbn = {9781450351911},
+  keywords = {Domain specific languages,Usability evaluation,Usability testing}
+}
+
+@article{razzaqSystematicLiteratureReview2024,
+  title = {A {{Systematic Literature Review}} on the {{Influence}} of {{Enhanced Developer Experience}} on {{Developers}}' {{Productivity}}: {{Factors}}, {{Practices}}, and {{Recommendations}}},
+  author = {Razzaq, Abdul and Buckley, Jim and Lai, Qin and Yu, Tingting and Botterweck, Goetz},
+  date = {2024-10},
+  journaltitle = {ACM Computing Surveys},
+  volume = {57},
+  number = {1},
+  pages = {46},
+  publisher = {Association for Computing Machinery},
+  issn = {15577341},
+  doi = {10.1145/3687299/ASSET/0A1CD69B-DCF1-402A-884C-31D996FEA61F/ASSETS/IMAGES/LARGE/CSUR-2022-0089-F06.JPG},
+  url = {https://dl.acm.org/doi/10.1145/3687299},
+  abstract = {Context and Motivation-Developer eXperience (Dev-X) is a recent research area that focuses on developers perceptions, feelings, and values with respect to software development and software quality. Research suggests that factors and practices related to Dev-X can have a substantial impact on developer productivity (Dev-P). However, despite a large and diverse body of literature on factors that can impact Dev-P in general, there is no coherent and comprehensive characterization of how Dev-X-specific insights can influence developer productivity.Aims-In the presented research, we aim to provide a coherent, comprehensive characterization of factors and practices related to Dev-X, with a particular focus on those factors and practices that potentially affect Dev-P.Method-To this end, we performed a systematic literature review and identified 218 relevant papers in this area. We characterize the papers based on the related frameworks and concepts common to Dev-X and Dev-P as presented in the existing literature. Dev-X factors such as "work fragmentation"and practices such as "collaboration with owner-developer"are identified using a grounded-in-The-literature, content-Analysis method, guided by the theory. For each Dev-X factor, we identify attributes that might be used to assess/ measure the current status (of an organization or project) regarding that factor and how that factor and its effects on productivity have been evidenced in the literature (mentioned vs. considered in questionnaires vs. substantiated with a more positivist evaluation).Results-We identify 33 Dev-X-related factors and 41 Dev-X-related practices, which are organized into 10 themes to summarize their influence. The results suggest that the availability of required resources, relevant expertise re the allocated tasks, and fewer interruptions are among the top positively impacting factors. Conversely, factors such as code complexity, heterogeneous contexts of tasks, and non-Adherence to standardization harm Dev-X and Dev-P. Top industrial practices employed to mitigate the negative influence of factors include characterization-based task assignments, mental model support, and the timely evolution of technologies.Conclusions-Overall, this research suggests that organizations can influence Dev-P through improved Dev-X, incorporating suitable practices to mediate relevant factors in their context. Important in this regard are practices such as fragmenting large tasks, highlighting the utility of proposed tasks/changes to the developers, and promoting (developer) ownership of artefacts. Finally, our results point to areas where further research seems appropriate, i.e., where Dev-X factors/practices have been proposed as being impactful on Dev-P but not yet fully substantiated or explored as such (factors like "Nature of Activity"and practices like choosing practices/protocols appropriately).},
+  keywords = {Developer Emotions,Developer Experience,Developer Perceptions,Developer Productivity,Developer Values,Human Factors in Software Engineering}
+}
+
+@article{sobierajDockerPerformanceEvaluation2024,
+  title = {Docker {{Performance Evaluation}} across {{Operating Systems}}},
+  author = {Sobieraj, Maciej and Kotyński, Daniel},
+  date = {2024-07},
+  journaltitle = {Applied Sciences 2024, Vol. 14, Page 6672},
+  volume = {14},
+  number = {15},
+  pages = {6672},
+  publisher = {Multidisciplinary Digital Publishing Institute},
+  issn = {2076-3417},
+  doi = {10.3390/APP14156672},
+  url = {https://www.mdpi.com/2076-3417/14/15/6672/htm https://www.mdpi.com/2076-3417/14/15/6672},
+  abstract = {Docker has gained significant popularity in recent years. With the introduction of Docker Desktop for Windows and macOS, there is a need to determine the impact of the operating system on the performance of the Docker platform. This paper aims to investigate the performance of Docker containers based on the operating system. One of the fundamental goals of this study is to conduct a comprehensive analysis of the Docker architecture. This technology utilizes Linux kernel virtualization mechanisms such as namespaces and cgroups. Upon analyzing the distribution of Docker Desktop for Windows and Docker Desktop for macOS, it was discovered that running the Docker environment on these requires a lightweight virtual machine that emulates the Linux system. This information suggests that the additional virtualization layer may hinder the performance of non-Linux operating systems hosting Docker containers. The paper presents a performance test of the Docker runtime on Linux, Microsoft Windows, and macOS. The test evaluated specific aspects of operating system performance on a MacBook computer with an ×86/64 processor architecture. The experiment carried out examined the performance in terms of CPU speed, I/O speed, and network throughput. This test measured the efficiency of software that utilizes various system resources.},
+  keywords = {Docker,operating system,performance tests,virtualization}
+}
+
+@misc{sponneman1CraftingDomain2024,
+  title = {(1) {{Crafting Domain Specific Languages}} - {{A Practical Guide}} - {{OCX}} 2024 - {{YouTube}}},
+  author = {Sponneman, Miro},
+  date = {2024},
+  url = {https://www.youtube.com/watch?v=G2qAYLm8Qjo}
+}
+
+@article{thibergThereAreMany2025,
+  title = {There Are Many like It, but This One Is {{Mine}}: {{Approaches}} to {{Personalization}} of {{Non-Persistent Development Environments Using Nix}}},
+  author = {Thiberg, Björn},
+  date = {2025},
+  keywords = {master thesis,Nix,Non-persistence,Software Engineering}
+}
+
+@article{trivodalievTeachingComputerProgramming2017,
+  title = {Teaching Computer Programming: {{The}} Macedonian Case Study of Functional Programming},
+  author = {Trivodaliev, Kire and Stojkoska, Biljana Risteska and Mihova, Marija and Jovanov, Mile and Kalajdziski, Slobodan},
+  date = {2017-06},
+  journaltitle = {IEEE Global Engineering Education Conference, EDUCON},
+  pages = {1282--1289},
+  publisher = {IEEE Computer Society},
+  issn = {21659567},
+  doi = {10.1109/EDUCON.2017.7943013},
+  abstract = {The rapid development of information technology has imposed a high rate of change and reconceptualization in the design of computer science (CS) courses in order to expand access, provide flexibility in the learning environments, and meet the expanding needs of the ICT industry for qualified graduates. In such environment programming skills have become a core competence for computer science and engineering students. The issue of choosing and/or developing the most effective approach to teaching computer-programming languages has risen to the greatest importance. This paper presents a study on teaching functional programming using different teaching approaches combining different modes of delivering learning material and different assessment and feedback types. The analysis is done on data for a span of three years of teaching the Logical and Functional Programming (LFP) course and Artificial Intelligence (AI) course, both of which include functional programming during a 7 week, 4 hours per week, long period. We analyse what is the effect of different teaching approaches, but also what is the success of students taking both courses and which order of taking the exams improves the student results. Our results show that although moving toward online oriented teaching with high levels of automation is a necessity imposed by the rise in student numbers, we still need a dedicated face-to-face time and appropriate human feedback in solving programming problems. Additionally, the results imply that some reorganization in the Computer Science and Engineering Undergraduate Curricula is needed in order to meet student needs and preferences.},
+  isbn = {9781509054671},
+  keywords = {Automatic assessment,Blended learning,Functional programming,Macedonian case study}
+}
+
+@article{zwingerNixSolutionProblems2026,
+  title = {Nix: {{A Solution With Problems}}},
+  author = {Zwinger, Matias},
+  date = {2026-04},
+  url = {https://arxiv.org/abs/2604.11398v1},
+  abstract = {Software deployment suffers from numerous problems pertaining, for example, to reproducibility and dependency resolution. Many of these problems have been successfully solved by the purely functional approach to package management implemented in the Nix project. However, Nix does not solve all issues, and it does introduces some novel problems of its own. Therefore, the aim of this thesis is to conduct a literature review on the current state of research on Nix and to determine the direction of future research. The first part of this paper explores the problems historically faced in different areas of software deployment, e.g., irreproducibility and dependency resolution issues. The main four categories of software deployment tools analyzed are build systems, package managers, configuration management, and development environments. Popular software from each category serve as case studies to illustrate the problems. The second part introduces Nix and explains the methods utilized to solve some of the problems introduced in the earlier part. Because Nix is the first large project to utilize the purely functional approach, it is far from a perfect solution. Thus, the third part is dedicated to analyzing the new problems that Nix introduces, as well as old problems, which Nix has been unable to solve, such as trust and granular incremental builds. Furthermore, some proposed state of the art solutions put forth by the Nix community are discussed.}
+}
