@@ -35,6 +35,27 @@
   abstract = {Motivation: A challenge for computational biologists is to make our analyses reproducible-i.e. to rerun, combine, and share, with the assurance that equivalent runs will generate identical results. Current best practice aims at this using a combination of package managers, workflow engines, and containers. Results: We present BioNix, a lightweight library built on the Nix deployment system. BioNix manages software dependencies, computational environments, and workflow stages together using a single abstraction: Pure functions. This lets users specify workflows in a clean, uniform way, with strong reproducibility guarantees.}
 }
 
+@article{bersoffSoftwareConfigurationManagement1978,
+  title = {Software {{Configuration Management}}},
+  author = {Bersoff, Edward H. and Henderson, Vilas D. and Siegel, Stan G.},
+  date = {1978-01-01},
+  journaltitle = {SIGSOFT Softw. Eng. Notes},
+  volume = {3},
+  number = {5},
+  pages = {9--17},
+  issn = {0163-5948},
+  doi = {10.1145/953579.811093},
+  url = {https://dl.acm.org/doi/10.1145/953579.811093},
+  urldate = {2026-05-06},
+  abstract = {This paper is about discipline. It is about discipline that managers should apply to software development. Why is such discipline needed? Quite simply because the software industry has traditionally behaved in an undisciplined manner—doing its own thing. The products that the industry has turned out have typicallyContained other than what was expected (usually less, rather than more);Been delivered much later than scheduled;Cost more than anticipated;Been poorly documented; andIf you have been involved in any of the situations quoted above, then this paper may be of some help. In short, if you are now, or intend to be, a software seller or buyer, then you should benefit from an understanding of Software Configuration Management. Lest you think that you are not now, or ever will be, a software seller or buyer—keep in mind that the recent technology explosion in electronic component miniaturization has placed the era of personalized computing at hand. In that context, nearly everyone may be considered a potential seller or buyer of software.This paper is about the discipline called Software Configuration Management (SCM). The objective of SCM is to assist the software seller in achieving product integrity and to assist the software buyer in obtaining a product that has integrity.}
+}
+
+@article{berzakEmbeddedDomainSpecific,
+  title = {Embedded {{Domain Specific Language}}: {{A Streamlined Approach}} for {{Framework Abstraction}}},
+  author = {Berzak, Daniel},
+  langid = {english}
+}
+
 @misc{Boersma2025,
   title = {{{WHY}} 2025 - How to Make a Domain-Specific Language for Non-Devs (so They Don't Need {{AI}}) - {{YouTube}}},
   author = {Boersma, Meinte},
@@ -45,8 +66,16 @@
 @online{BuildSystemsCarte,
   title = {Build Systems à La Carte | {{Proceedings}} of the {{ACM}} on {{Programming Languages}}},
   url = {https://dl.acm.org/doi/10.1145/3236774},
-  urldate = {2026-04-16},
-  file = {/home/smaugthur/Zotero/storage/3YQ49HY5/3236774.html}
+  urldate = {2026-04-16}
+}
+
+@online{caddetNixNickel,
+  title = {Nix with; with {{Nickel}}},
+  author = {Caddet, François},
+  url = {https://tweag.io/blog/2023-01-24-nix-with-with-nickel/},
+  urldate = {2026-05-05},
+  abstract = {The Nix `with` keyword is challenging, but we transpiled it to Nickel anyway.},
+  langid = {english}
 }
 
 @article{Courts2013,
@@ -118,9 +147,28 @@
 
 @misc{fricklerhandwerk2022,
   title = {Usability Studies - Development / Documentation - {{NixOS}} Discourse},
-  author = {{fricklerhandwerk}},
+  author = {{Valentin Gagarin}},
   date = {2022},
   url = {https://discourse.nixos.org/t/usability-studies/21404}
+}
+
+@online{gagarinFourMonthsNix,
+  title = {Four Months into {{The Nix Book}}},
+  author = {Gagarin, Valentin},
+  url = {https://tweag.io/blog/2022-09-29-the-nix-book-report/},
+  urldate = {2026-05-05},
+  abstract = {A comprehensive report on what happened in four months of dedicated work on Nix documentation, and what I learned from it.},
+  langid = {english}
+}
+
+@online{gagarinNixLanguageTutorial,
+  title = {Nix Language Tutorial Compilation},
+  author = {Gagarin, Valentin},
+  url = {https://github.com/NixOS/nix.dev/issues/288},
+  urldate = {2026-05-05},
+  abstract = {Official documentation for getting things done with Nix. - Nix language tutorial · Issue \#288 · NixOS/nix.dev},
+  langid = {english},
+  organization = {GitHub}
 }
 
 @article{Giallorenzo2021,
@@ -182,8 +230,7 @@
   doi = {10.1145/214748.214758},
   url = {https://dl.acm.org/doi/10.1145/214748.214758},
   urldate = {2026-05-02},
-  abstract = {Instead of limiting functionality, usability complements functionality. It affects how and with what effectiveness a system is used, and even whether or not it is used at all.},
-  file = {/home/smaugthur/Zotero/storage/GV57IKUF/Goodwin - 1987 - Functionality and usability.pdf}
+  abstract = {Instead of limiting functionality, usability complements functionality. It affects how and with what effectiveness a system is used, and even whether or not it is used at all.}
 }
 
 @article{Hudak1989,
@@ -200,6 +247,16 @@
   url = {https://dl.acm.org/doi/10.1145/72551.72554},
   abstract = {The foundations of functional programming languages are examined from both historical and technical perspectives. Their evolution is traced through several critical periods: early work on lambda ca...},
   keywords = {Data abstraction,higher-order functions,lazy evaluation,nonprocedural languages,referential transparency,types,very high-level languages}
+}
+
+@online{hufschmittCurrentStatePtyx,
+  title = {Current State of Ptyx},
+  author = {Hufschmitt, Théophane},
+  url = {https://github.com/thufschmitt/ptyx/issues/8},
+  urldate = {2026-05-05},
+  abstract = {Hi, is the project alive? Do you plan on continuing to work on it? Thanks},
+  langid = {english},
+  organization = {GitHub}
 }
 
 @article{Kuusinen2016,
@@ -334,8 +391,7 @@
   url = {https://dl.acm.org/doi/10.1145/3236774},
   urldate = {2026-04-16},
   abstract = {Build systems are awesome, terrifying -- and unloved. They are used by every developer around the world, but are rarely the object of study. In this paper we offer a systematic, and executable, framework for developing and comparing build systems, viewing them as related points in landscape rather than as isolated phenomena. By teasing apart existing build systems, we can recombine their components, allowing us to prototype new build systems with desired properties.},
-  issue = {ICFP},
-  file = {/home/smaugthur/Zotero/storage/47YVQ34T/Mokhov et al. - 2018 - Build systems à la carte.pdf}
+  issue = {ICFP}
 }
 
 @article{Myers2016,
@@ -423,6 +479,17 @@
   url = {https://www.researchgate.net/publication/227030070_More_Natural_Programming_Languages_and_Environments},
   urldate = {2026-04-17},
   abstract = {PDF | Over the last six years, we have been working to create programming languages and environments that are more natural, by which we mean closer to... | Find, read and cite all the research you need on ResearchGate},
+  langid = {english}
+}
+
+@article{PDFInfrastructureCode,
+  title = {({{PDF}}) {{Infrastructure}} as {{Code}}: {{Historical Insights}} and {{Future Directions}}},
+  shorttitle = {({{PDF}}) {{Infrastructure}} as {{Code}}},
+  journaltitle = {ResearchGate},
+  doi = {10.21275/SR24820064820},
+  url = {https://www.researchgate.net/publication/384362763_Infrastructure_as_Code_Historical_Insights_and_Future_Directions},
+  urldate = {2026-05-05},
+  abstract = {PDF | Infrastructure as Code (IaC) revolutionizes IT infrastructure management by automating provisioning and configuration through machine-readable... | Find, read and cite all the research you need on ResearchGate},
   langid = {english}
 }
 
@@ -519,8 +586,7 @@
   url = {https://www.typescriptlang.org/},
   urldate = {2026-05-02},
   abstract = {TypeScript extends JavaScript by adding types to the language. TypeScript speeds up your development experience by catching errors and providing fixes before you even run your code.},
-  langid = {english},
-  file = {/home/smaugthur/Zotero/storage/HIKMYJLF/www.typescriptlang.org.html}
+  langid = {english}
 }
 
 @article{VanDerBurg2014,
@@ -535,6 +601,22 @@
   doi = {10.1016/J.SCICO.2012.03.006},
   abstract = {The process of deploying a distributed system in a network of machines is often very complex, laborious and time-consuming, while it is hard to guarantee that the system will work as expected and that specific non-functional deployment requirements from the domain are supported. In this paper we describe the Disnix toolset, which provides system administrators or developers with automatic deployment of a distributed system in a network of machines from declarative specifications and offers properties such as complete dependencies, atomic upgrades and rollbacks to make this process efficient and reliable. Disnix has an extensible architecture, allowing the integration of custom modules to make the deployment more convenient and suitable for the domain in which the system is to be used. Disnix has been under development for almost four years and has been applied to several types of distributed systems, including an industrial case study. © 2011 Elsevier B.V. All rights reserved.},
   keywords = {Distributed systems,Service-oriented systems,Software deployment}
+}
+
+@article{vandeursenDomainspecificLanguagesAnnotated2000,
+  title = {Domain-Specific Languages: An Annotated Bibliography},
+  shorttitle = {Domain-Specific Languages},
+  author = {family=Deursen, given=Arie, prefix=van, useprefix=true and Klint, Paul and Visser, Joost},
+  date = {2000-06-01},
+  journaltitle = {SIGPLAN Not.},
+  volume = {35},
+  number = {6},
+  pages = {26--36},
+  issn = {0362-1340},
+  doi = {10.1145/352029.352035},
+  url = {https://dl.acm.org/doi/10.1145/352029.352035},
+  urldate = {2026-05-05},
+  abstract = {We survey the literature available on the topic of domain-specific languages as used for the construction and maintenance of software systems. We list a selection of 75 key publications in the area, and provide a summary for each of the papers. Moreover, we discuss terminology, risks and benefits, example domain-specific languages, design methodologies, and implementation techniques.}
 }
 
 @article{Zwinger2026,

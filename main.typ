@@ -17,6 +17,10 @@
   size: 11pt,
 )
 
+#set par(
+  justify: true
+)
+
 #set heading(
   numbering: "1.a.",
 )
@@ -76,13 +80,14 @@ Sin embargo, a pesar de sus capacidades prometedoras, Nix no ha gozado de la mis
 
 El distribuir software de las _cocinas_ de los ingenieros a _las mesas de los usuarios finales_ nunca a sido una tarea sencilla, los artefactos de software se comportan igual a las plantas exóticas cuando son transplantadas a un hábitat diferente al que están acostumbradas: se marchitan. Como las plantas, el software "crece y evoluciona" en el hardware, sistema operativo y librerias específicas, de la computadora del ingeniero, pero en el momento que esos artefactos son llevados a los ecosistemas extraños, que son los dispositivos de los usuarios finales, el que funcione o no se vuelve una apuesta ante la que no se tiene control... o si? 
 
-El problema anteriormente descrito, es el sujeto de estudio del campo de "Manejo de Configuracion de Software" (o CSM por sus siglas en íngles), donde se reconoce que la ejecucición correcta de software no solamente depende de su código fuente, sino del contexto que le rodea @Dolstra2006. Con los años se ha desarrollado una familia de software, llamada *_manejadores de paquetes_* responsable de modificar el entorno global de las computadoras objetivo para conseguir las condiciones ideales para cada aplicación. Al día de hoy se han convertido en una familia tan variada que han se vuelto una característica diferenciadora en las diferentes distribuciones de Linux o lenguajes de programación @Gibb2026. Una corriente opuesta es *_virtualización_*, que consiste en empaquetar las aplicaciones junto a los entornos completos que necesitan y ejecutarlas de forma aislada, soluciones de este tipo son muy usadas en servicios de la nube [TODO:].
+El problema anteriormente descrito, es el sujeto de estudio del campo de "Manejo de Configuracion de Software" (o CSM por sus siglas en íngles), donde se reconoce que la ejecucición correcta de software no solamente depende de su código fuente, sino del contexto que le rodea @Dolstra2006. Con los años se ha desarrollado una familia de software, llamada *manejadores de paquetes* responsable de modificar el entorno global de las computadoras objetivo para conseguir las condiciones ideales para cada aplicación. Al día de hoy se han convertido en una familia tan variada que han se vuelto una característica diferenciadora en las diferentes distribuciones de Linux o lenguajes de programación @Gibb2026. Una corriente opuesta es la *virtualización*, que consiste en empaquetar las aplicaciones junto a los entornos completos que necesitan y ejecutarlas de forma aislada, soluciones de este tipo son muy usadas en servicios de la nube @PDFInfrastructureCode.
+
+Sin embargo, como veremos en siguientes capitulos los manejadores de paquetes lidian con el problema que intentar satisfacer a varias aplicaciones en un entorno global puede llevar a conflictos irresolubles cuando las necesidades de una contradicen la de otra @Zwinger2026; por otro lado, la virtualización elimina las posibilidades de conflictos a cambio de un mayor consumo de recursos @Sobieraj2024 @Lingayat2018. 
 
 #figure(image("media/Figure1.svg"), caption: [
   Dos paquetes (```txt FOO``` y ```txt BAR```) dependen de ```txt Node``` y ```txt Clang```. En manejadores de paquetes, el entorno global obliga a usar una sola versión compatible (```txt Node v23.8```); en la virtualizacion ambas versiones coexisten, pero se pueden duplicar dependencias como ```txt Clang 19.2```. Elaboración propia.
 ])<figura1>
 
-Sin embargo, como veremos en siguientes capitulos los manejadores de paquetes lidian con el problema que intentar satisfacer a varias aplicaciones en un entorno global puede llevar a conflictos irresolubles cuando las necesidades de una contradicen la de otra @Zwinger2026; por otro lado, la virtualización elimina las posibilidades de conflictos a cambio de un mayor consumo de recursos @Sobieraj2024 @Lingayat2018. 
 
 _La unión hace la fuerza_, dando origen en 2003 a *Nix* como una tercera alternativa que fusiona ideas de ambas corrientes partiendo de la idea que: Usar los mismos ingredientes y pasos debería producir el mismo resultado sin importar la computadora, Nix garantiza lo primero mediante identificadores (ID) únicos que permiten la coexistencia de dependencias, y lo segundo mediante entornos aislados que aseguran la reproducibilidad @Dolstra2006. La elegancia de Nix reside en cómo construye estos identificadores y entorno aislados, tema que se abordará en las siguientes secciones.
 
@@ -90,12 +95,11 @@ _La unión hace la fuerza_, dando origen en 2003 a *Nix* como una tercera altern
   Siguiento la @figura1, Nix almacena los paquetes en un entorno global (_Nix store_) con identificadores únicos, permitiendo la coexistencia de versiones del mismo paquete (```txt Node```), pero tambien la reutilización de dependencias (```txt Clang```). Elaboración propia
   ])
 
-Fue esta enfoque centrado en seguir recetas explícitas que permitió a Nix conseguir una serie de hitos importantes al contar con unos de los repositorios de paquetes generales más grandes @marakasovRepositoryStatistics, de los cuales 700 mil han demostrado poder replicarse de forma binariamente identica en diferentes computadoras @Malka2025. Resultó que mucha de las ideas podían generalizarse hasta al punto de reproducir casi por completo un sistema operativo, dando origen a la distribución NixOS @Dolstra2008.
+Fue esta enfoque centrado en seguir recetas explícitas que permitió a Nix conseguir una serie de hitos importantes al contar con unos de los repositorios de paquetes generales más grandes de Linux @marakasovRepositoryStatistics, de los cuales 700 mil han demostrado poder replicarse de forma binariamente identica en diferentes computadoras @Malka2025. Aconteció que mucha de las ideas podían generalizarse hasta al punto de reproducir casi por completo un sistema operativo, dando origen a la distribución NixOS @Dolstra2008.
 
-A pesar de ello , Nix ha gozado de una adopción bastante reducida en comparación a las otras herramientas discutidas @stackoverflowMostPopularTechnologies ¿Cuál es entonces su talón de Aquiles? Tal parece que no son problemas necesariamente técnicos, sino de experiencia de uso; en encuestas hechas en el foro oficial, la comunidad resaltaba problemas importantes con la documentación, errores crípticos y un lenguaje díficil de dominar @2022NixSurvey2022 @NixCommunitySurvey2023; además, en otra encuesta, se estimó que los usuarios perciben requerir un tiempo de 5 años para dominar la herramienta a pesar que la mayoría lo usa a diario @NixCommunitySurvey2024. Llevando a un raro caso donde los problemas de usabilidad son tan severos que impiden el uso de la herramienta @goodwinFunctionalityUsability1987
+A pesar de ello , Nix ha gozado de una adopción bastante reducida en comparación a las otras herramientas discutidas @stackoverflowMostPopularTechnologies ¿Cuál es entonces su talón de Aquiles? Tal parece que no son problemas necesariamente técnicos, sino de experiencia de uso; en encuestas hechas en el foro oficial, la comunidad resaltaba problemas importantes con la documentación, errores crípticos y un DSL (_Domain Specific Language_ @vandeursenDomainspecificLanguagesAnnotated2000) díficil de dominar @2022NixSurvey2022 @NixCommunitySurvey2023; además, en otra encuesta, se estimó que los usuarios perciben requerir un tiempo de 5 años para dominar la herramienta a pesar que la mayoría lo usa a diario. Llevando a un raro caso donde a pesar que la comunidad le encanta la idea detrás de Nix @NixCommunitySurvey2024  sus problemas de usabilidad son tan severos que impiden su uso, lo que concuerda con observaciones de otros estudio en herramientas son situaciones similares @goodwinFunctionalityUsability1987.
 
-LLevando a casos donde, a pesar que los usuarios disfrutan el concepto detrás de Nix @NixCommunitySurvey2024, admiten que la ,   
-Muchos de los problemas mencionados no son técnicos sino de experiencia de uso, y que cae en el rando de estudio del DX (_Developer Experience_) @Fagerholm2012. 
+El concepto que los desarrolladores también son usuarios dio origen al campo de estudio de _Developer Experience_ o _DX_ (Experiencia de desarrollo), donde el estudio sobre como los desarrolladores perciben sus herramientas ha sido un tema frecuente @Razzaq2024 sobre el que ya se han desarrollado algunos instrumentos como DEXI para evaluar dichas dimensiones@Kuusinen2016. Y dado el trayecto de intentos por mejorar la DX en Nix @caddetNixNickel @gagarinFourMonthsNix @hufschmittCurrentStatePtyx @fricklerhandwerk2022 el presente trabajo, busca ser una aplicación de las técnicas aprendidas en el campo de DX, en conjunto con el diseño de lenguajes, para evaluar si un Lenguaje de Proposito Específico Embebido (EDSL por sus siglas en inglés @vandeursenDomainspecificLanguagesAnnotated2000) en Typescript @Typescript podría ayudar a reducir la barra de entrada para nuevos desarrolladores en la herramienta.
 
 #pagebreak()
 
@@ -105,15 +109,17 @@ Muchos de los problemas mencionados no son técnicos sino de experiencia de uso,
 Evaluar en qué medida el uso de TypeScript como lenguaje de propósito general podría reducir la barrera de entrada para nuevos usuarios del manejador de paquetes Nix, en comparación con el DSL de Nix, medido a través de métricas de usabilidad percibida, tiempo de completación de tareas y experiencia de usuario.
 
 == Específicos
-1. Conducir sesiones de pensar-en-alto con estudiantes de Ciencias de la Computación que no hayan utilizado Nix previamente, aplicando la técnica de Programación Natural @panePDFMoreNatural2006, con el fin de identificar y categorizar los principales puntos de dolor cognitivos y técnicos que presenta el lenguaje de Nix, obteniendo como entregable un inventario de categorías de dificultad validado mediante análisis temático.
-2. Desarrollar una librería en TypeScript que genere archivos de configuración, válidos en el lenguaje de Nix, cubriendo al menos las funcionalidades de la libreria estándar: mkDerivation, mkShell, fetchFromGitHub, validada mediante una conjunto de pruebas automatizadas que verifique la construcción exitosa con nix-build en un mínimo de 30 casos de uso representativos.
-3. Comparar la usabilidad y la experiencia de usuario del lenguaje de Nix frente a la librería TypeScript desarrollada, en una muestra de estudiantes de Ciencias de la Computación sin experiencia previa en Nix, mediante sesiones de pensar-en-alto y la aplicación de los instrumentos SDFS-2 (motivación), IMI (motivación intrínseca) y DEXI (experiencia de desarrollo), analizando las diferencias entre ambas soluciones a través de Mann-Whitney con un nivel de significancia de α = 0.10.
+1. Conducir sesiones de pensar-en-alto con estudiantes de Ciencias de la Computación que no hayan utilizado Nix previamente, aplicando la técnica de Programación Natural, con el fin de identificar y categorizar los principales puntos de dolor cognitivos que presenta el lenguaje de Nix.
+2. Desarrollar un EDSL en TypeScript que genere archivos de configuración, válidos en el lenguaje de Nix, cubriendo al menos las funcionalidades de la libreria estándar.
+3. Comparar el lenguaje de Nix frente a la librería TypeScript desarrollada, en una muestra de estudiantes de Ciencias de la Computación sin experiencia previa en Nix, mediante sesiones de pensar-en-alto y la aplicación de los instrumentos SDFS-2 (motivación), IMI (motivación intrínseca) y DEXI (experiencia de desarrollo), analizando las diferencias entre ambas soluciones a través de Mann-Whitney.
 
 #pagebreak()
 
 = Justificación
 
-El control del ambiente en que fueron
+En el pasado montar un servicio de TI (Tecnologías de la información) [TODO: es esta una abreviatura que hay que explicar?] requería no solamente de programar el código fuente, sino también el montar manualmente los servidores, redes , años después la nube popularizo un modelo donde los
+
+El control del ambiente en que fueron 
 
 ¿Por que Nix de todas Las herramientas?\
 Porque ha demostrado ser una herramienta muy poderasa, y que la comunidad ama a pesar de su dificultad de uso.
