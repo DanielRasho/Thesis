@@ -188,34 +188,45 @@ El construir un paquete se puede ver como una receta, el seguir los mismos pasos
 
 == Soluciones existentes a NixLang <Appendix1>
 
-#table(
-  columns: 4,
-  table.header[*Problema*][*Soluciones \ existentes*][*Limitaciones*][*Propuesta*],
+#figure(
+  table(
+  columns: (25pt, 1fr, 1fr, 1fr, 1fr),
+  table.header[][*Problema*][*Soluciones \ existentes*][*Limitaciones*][*Propuesta*],
+  [@Courts2013], 
   [Necesidad de aprender un lenguaje exclusivo de Nix],
   [Uso de lenguajes de propósito general (e.g., Guile en Guix)],
-  [Lenguajes poco adoptados mantienen la barrera de entrada],
+  [Lenguajes poco adoptados mantienen la barrera de entrada @stackoverflowMostPopularTechnologies],
   [Adoptar un lenguaje ampliamente conocido],
   
+  [@gagarinFourMonthsNix], 
   [Escasez de documentación y ejemplos],
-  [Producción centralizada de documentación],
-  [Alto costo de mantenimiento y dependencia del equipo core],
-  [Desacoplar la documentación del desarrollo del núcleo],
+  [Reescritura de la documentación en un lugar centralizado.],
+  [Alto costo de mantenimiento y dependencia de aprobación. ],
+  [Generar documentacion a partir del código en si.],
   
-  [Dependencia de funciones complejas de la stdlib sin tipado],
-  [Extensiones del lenguaje para tipado estático],
+  [@caddetNixNickel \ @hufschmittCurrentStatePtyx],
+  [Dependencia de funciones complejas de las ],
+  [Extensiones al lenguaje para tipado estático],
   [Alta complejidad de implementación],
   [Delegar el tipado a herramientas externas maduras],
   
+  [@Schwaighofer2026],
   [Alta complejidad general del ecosistema],
   [Generación de código con Inteligencia Artificial],
   [No aborda causas estructurales; depende de datos de entrenamiento],
   [Evitar soluciones basadas en generación automática],
   stroke: 0.5pt + black, 
+),
+caption: "Una tabla comparativa sobre algunas de las soluciones propuestas por la comunidad de Nix que buscan mejorar la experiencia en Nixlang de forma directa o indirecta, incluyendo sus limitaciones y una propuesta derivada.")
+
+== Interés en Neovim <Appendix2>
+
+Con datos extraídos de Google Trends para la búsqueda “Neovim - Programa” en su modo clásico, se obtuvieron series históricas correspondientes a los últimos años. Los datos utilizados se muestran en @googleNeovimInterestTrends.
+
+#figure(
+image("media/indice de interes de Neovim en el tiempo.png", width: 80%),
+caption: [Índice de interés de búsqueda de Neovim en Google entre 2014 y 2026. Se observa un aumento a finales de 2021, aproximadamente seis meses después de la introducción del soporte para Lua @NeovimNews112021.]
 )
-
-== Popularidad <Appendix2>
-
-#figure(image("media/indice de interes de Neovim en el tiempo.png"), caption: "sdafsd")
 
 
 #pagebreak()
