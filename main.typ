@@ -34,6 +34,18 @@
     ] else [
         #it
     ]
+    
+// ============ FUNCTIONS
+
+#let cite-range(first, ..middle, last) = {
+  cite(label(first))
+  for c in middle.pos() {
+    box(width: 0pt, text(fill: white, cite(label(c))))
+  }
+  text("\u{2013}")
+  cite(label(last))
+}
+ 
 // ============ COVER
 
 #align(center)[
@@ -70,17 +82,17 @@
 
 
 = Resumen
-El problema de llevar software de una computadora a otra y que siga funcionando (proceso conocido como _Despliege de Software_ @Dolstra2006) es un yugo con el que las Ciencias de Computación no han dado una solución definitiva, esencialmente porque para que una pieza de software funcione correctamente no solamente depende del código fuente en el que esta escrita, sino del contexto que le rodea (hardware, sistema operativo, dependencias, etc.), bajo ese contexto surgen Nix como un manejador de paquetes y sistema de construcción #footnote[Sistemas que automatizan la ejecución de tareas repetitivas, usualmente para crear artefactos de software que pueden ser desplegados @mokhovBuildSystemsCarte2018] que utiliza un enfoque inspirado en la pureza funcional, donde cada paquete define explícitamente el contexto en el que espera ser construido y ejecutado. Este enfoque a demostrado poder crear más de 700 mil artefactos binariamente identicos en diferentes computadoras @Malka2025 y contar con el repositorio de paquetes más grande a fecha de este documento @marakasovRepositoryStatistics. La idea evolucionó al punto de definir el estado casi completo de un sistema operativo mediante un solo archivo de configuración @Dolstra2008.
+El problema de llevar _software_ de una computadora a otra y que siga funcionando (proceso conocido como Despliege de Software) es un yugo con el que las Ciencias de Computación no han dado una solución definitiva, esencialmente porque para que una pieza de _software_ funcione correctamente no solamente depende del código fuente en el que esta escrita, sino del contexto que le rodea (_hardware_, sistema operativo, dependencias, etc.), bajo ese contexto surgen Nix como un manejador de paquetes y sistema de construcción #footnote[Sistemas que automatizan la ejecución de tareas repetitivas, usualmente para crear artefactos de _software_ que pueden ser desplegados] que utiliza un enfoque inspirado en la pureza funcional, donde cada paquete define explícitamente el contexto en el que espera ser construido y ejecutado. Este enfoque a demostrado poder crear más de 700 mil artefactos binariamente identicos en diferentes computadoras y contar con el repositorio de paquetes más grande a fecha de este documento. La idea evolucionó al punto de definir el estado casi completo de un sistema operativo mediante un solo archivo de configuración.
 
-Sin embargo, a pesar de sus capacidades prometedoras, Nix no ha gozado de la misma adopción que otras herramientas que abordan los mismos problemas de reproducibilidad como Docker, Conda o VirtualEnv u otros manejadores de paquetes @stackoverflowMostPopularTechnologies. Las causas de acuerdo a la comunidad son varias: Documentación compleja, errores cripticos, o un lenguaje de programación díficil de dominar; muchos de ellos no siendo problemas técnicos sino de experiencia de uso, y que cae en el rango de estudio del DX (_Developer Experience_) @Fagerholm2012. Este trabajó se enfocó en verificar si proveer una nueva forma de interactuar con Nix a travez de un lenguaje de proposito general como Typescript, puede reducir la barrera de entrada para nuevos usuarios y por ende mejorar su DX.
+Sin embargo, a pesar de sus capacidades prometedoras, Nix no ha gozado de la misma adopción que otras herramientas que abordan los mismos problemas de reproducibilidad como Docker, Conda o VirtualEnv u otros manejadores de paquetes. Las causas de acuerdo a la comunidad son varias: Documentación compleja, errores cripticos, o un lenguaje de programación díficil de dominar; muchos de ellos no siendo problemas técnicos sino de experiencia de uso, y que cae en el rango de estudio del DX (Experiencia de Desarrollo por sus siglas en inglés). Este trabajó se enfoca en verificar si proveer una nueva forma de interactuar con Nix a travez de un lenguaje de proposito general como Typescript, puede reducir la barrera de entrada para nuevos usuarios y por ende mejorar su DX.
 
 #pagebreak()
 
 = Introducción
 
-El distribuir software de las _cocinas_ de los ingenieros a _las mesas de los usuarios finales_ nunca a sido una tarea sencilla, los artefactos de software se comportan igual a las plantas exóticas cuando son transplantadas a un hábitat diferente al que están acostumbradas: se marchitan. Como las plantas, el software "crece y evoluciona" en el hardware, sistema operativo y librerias específicas, de la computadora del ingeniero, pero en el momento que esos artefactos son llevados a los ecosistemas extraños, que son los dispositivos de los usuarios finales, el que funcione o no se vuelve una apuesta ante la que no se tiene control... o si? 
+El distribuir _software_ de las cocinas de los ingenieros a las mesas de los usuarios finales sido una tarea sencilla  @mantylaSoftwareDeploymentActivities2011, los artefactos de _software_ se comportan igual a las plantas exóticas cuando son transplantadas a un hábitat diferente al que están acostumbradas: se marchitan @Dolstra2006. Como las plantas, el _software_ "crece y evoluciona" en el _hardware_, sistema operativo y librerias específicas, de la computadora del ingeniero, pero en el momento que esos artefactos son llevados a los ecosistemas extraños, que son los dispositivos de los usuarios finales, el que funcione o no se vuelve una apuesta ante la que no se tiene control... o si? @Dolstra2006.
 
-El problema anteriormente descrito, es el sujeto de estudio del campo de "Manejo de Configuracion de Software" (o CSM por sus siglas en íngles), donde se reconoce que la ejecucición correcta de software no solamente depende de su código fuente, sino del contexto que le rodea @Dolstra2006. Con los años se ha desarrollado una familia de software, llamada *manejadores de paquetes* responsable de modificar el entorno global de las computadoras objetivo para conseguir las condiciones ideales para cada aplicación. Al día de hoy se han convertido en una familia tan variada que han se vuelto una característica diferenciadora en las diferentes distribuciones de Linux o lenguajes de programación @Gibb2026. Una corriente opuesta es la *virtualización*, que consiste en empaquetar las aplicaciones junto a los entornos completos que necesitan y ejecutarlas de forma aislada, soluciones de este tipo son muy usadas en servicios de la nube @PDFInfrastructureCode.
+El problema anteriormente descrito, es el sujeto de estudio del campo de "Manejo de Configuracion de _Software_" (o CSM por sus siglas en íngles), donde se reconoce que la ejecucición correcta de _software_ no solamente depende de su código fuente, sino del contexto que le rodea @Dolstra2006. Con los años se ha desarrollado una familia de _software_, llamada *manejadores de paquetes* responsable de modificar el entorno global de las computadoras objetivo para conseguir las condiciones ideales para cada aplicación. Al día de hoy se han convertido en una familia tan variada que han se vuelto una característica diferenciadora en las diferentes distribuciones de Linux o lenguajes de programación @Gibb2026. Una corriente opuesta es la *virtualización*, que consiste en empaquetar las aplicaciones junto a los entornos completos que necesitan y ejecutarlas de forma aislada, soluciones de este tipo son muy usadas en servicios de la nube @PDFInfrastructureCode.
 
 Sin embargo, como veremos en siguientes capitulos los manejadores de paquetes lidian con el problema que intentar satisfacer a varias aplicaciones en un entorno global puede llevar a conflictos irresolubles cuando las necesidades de una contradicen la de otra @Zwinger2026; por otro lado, la virtualización elimina las posibilidades de conflictos a cambio de un mayor consumo de recursos @Sobieraj2024 @Lingayat2018. 
 
@@ -99,42 +111,37 @@ Fue esta enfoque centrado en seguir recetas explícitas que permitió a Nix cons
 
 A pesar de ello , Nix ha gozado de una adopción bastante reducida en comparación a las otras herramientas discutidas @stackoverflowMostPopularTechnologies ¿Cuál es entonces su talón de Aquiles? Tal parece que no son problemas necesariamente técnicos, sino de experiencia de uso; en encuestas hechas en el foro oficial, la comunidad resaltaba problemas importantes con la documentación, errores crípticos y un DSL (_Domain Specific Language_ @vandeursenDomainspecificLanguagesAnnotated2000) díficil de dominar @2022NixSurvey2022 @NixCommunitySurvey2023; además, en otra encuesta, se estimó que los usuarios perciben requerir un tiempo de 5 años para dominar la herramienta a pesar que la mayoría lo usa a diario. Llevando a un raro caso donde a pesar que la comunidad le encanta la idea detrás de Nix @NixCommunitySurvey2024  sus problemas de usabilidad son tan severos que impiden su uso, lo que concuerda con observaciones de otros estudio en herramientas son situaciones similares @goodwinFunctionalityUsability1987.
 
-El concepto que los desarrolladores también son usuarios dio origen al campo de estudio de _Developer Experience_ o _DX_ (Experiencia de desarrollo), donde el estudio sobre como los desarrolladores perciben sus herramientas ha sido un tema frecuente @Razzaq2024 sobre el que ya se han desarrollado algunos instrumentos como DEXI para evaluar dichas dimensiones@Kuusinen2016. Y dado el trayecto de intentos por mejorar la DX en Nix @caddetNixNickel @gagarinFourMonthsNix @hufschmittCurrentStatePtyx @fricklerhandwerk2022 el presente trabajo, busca ser una aplicación de las técnicas aprendidas en el campo de DX, en conjunto con el diseño de lenguajes, para evaluar si un Lenguaje de Proposito Específico Embebido (EDSL por sus siglas en inglés @vandeursenDomainspecificLanguagesAnnotated2000) en Typescript @Typescript podría ayudar a reducir la barra de entrada para nuevos desarrolladores en la herramienta.
+El concepto que los desarrolladores también son usuarios dio origen al campo de estudio de Experiencia de Desarrollo (o DX por sus siglas en inglés), donde el estudio sobre como los desarrolladores perciben sus herramientas ha sido un tema frecuente @Razzaq2024 sobre el que ya se han desarrollado algunos instrumentos como DEXI para evaluar dichas dimensiones@Kuusinen2016. Y dado el trayecto de intentos por mejorar la DX en Nix #cite-range("caddetNixNickel", "gagarinFourMonthsNix", "hufschmittCurrentStatePtyx", "fricklerhandwerk2022") el presente trabajo, busca ser una aplicación de las técnicas aprendidas en el campo de DX, en conjunto con el diseño de lenguajes, para evaluar si un Lenguaje de Proposito Específico Embebido (EDSL por sus siglas en inglés @vandeursenDomainspecificLanguagesAnnotated2000) en Typescript @Typescript podría ayudar a reducir la barra de entrada para nuevos desarrolladores en la herramienta.
 
 #pagebreak()
 
 = Objetivos
 
 == General
-Evaluar en qué medida el uso de TypeScript como lenguaje de propósito general podría reducir la barrera de entrada para nuevos usuarios del manejador de paquetes Nix, en comparación con el DSL de Nix, medido a través de métricas de usabilidad percibida, tiempo de completación de tareas y experiencia de usuario.
+Evaluar en qué medida el uso de TypeScript como lenguaje de propósito general podría reducir la barrera de entrada para nuevos usuarios del manejador de paquetes Nix, en comparación con su lenguaje de configuración original, medido a través de métricas de tiempo de completación de tareas y experiencia de usuario.
 
 == Específicos
-1. Conducir sesiones de pensar-en-alto con estudiantes de Ciencias de la Computación que no hayan utilizado Nix previamente, aplicando la técnica de Programación Natural, con el fin de identificar y categorizar los principales puntos de dolor cognitivos que presenta el lenguaje de Nix.
+1. Conducir sesiones de pensar-en-alto con estudiantes de Ciencias de la Computación que no hayan utilizado Nix previamente, aplicando la técnica de "Programación Natural", con el fin de identificar y categorizar los principales puntos de dolor cognitivos que presenta el lenguaje de Nix.
 2. Desarrollar un EDSL en TypeScript que genere archivos de configuración, válidos en el lenguaje de Nix, cubriendo al menos las funcionalidades de la libreria estándar.
-3. Comparar el lenguaje de Nix frente a la librería TypeScript desarrollada, en una muestra de estudiantes de Ciencias de la Computación sin experiencia previa en Nix, mediante sesiones de pensar-en-alto y la aplicación de los instrumentos SDFS-2 (motivación), IMI (motivación intrínseca) y DEXI (experiencia de desarrollo), analizando las diferencias entre ambas soluciones a través de Mann-Whitney.
+3. Comparar el lenguaje de Nix frente a la librería desarrollada con estudiantes de Ciencias de la Computación sin experiencia previa en Nix, mediante sesiones de pensar-en-alto y la aplicación de los instrumentos SDFS-2 (motivación), IMI (motivación intrínseca) y DEXI (experiencia de desarrollo), analizando las diferencias entre ambas soluciones a través de Mann-Whitney.
 
 #pagebreak()
 
 = Justificación
 
-En el pasado montar un servicio de TI (Tecnologías de la información) [TODO: es esta una abreviatura que hay que explicar?] requería no solamente de programar el código fuente, sino también el montar manualmente los servidores, redes , años después la nube popularizo un modelo donde los
+Con el crecimiento del mercado de los servicios de infrastructura como código @grandviewresearchInfrastructureCodeMarket, se ha aprendido que el poder definir el estado de sistemas completos a travéz de código, trae ventajas importantes en velocidad de desarrollo, escalabilidad y costos @pandyaIntroductionInfrastructureCode2022. La misma idea también se ha aplicado a entornos de desarrollo @ghanbariUsingDevelopmentEnvironment2026 o flujos de despliegue continuo @wesselGitHubActionsImpact2023; todo lo anterior *sugiere que herramientas que permiten definir entidades o procesos de forma declarativa pueden facilitar el ciclo de desarrollo de _software_*. Nix a mostrado ser una de esas herramientas en el ambito de manejo de paquetes.
 
-El control del ambiente en que fueron 
+Por medio de su lenguaje de configuración, Nix permite describir: la construcción, instalación y composición de paquetes de _software_ @Dolstra2006, habilidad que se ha mostrado aplicable en configuración de ambientes de Computacion de Alto Rendimiento @guilloteauPainlessTranspositionReproducible2022 @Gomez2020, sistemas operativos @Thiberg2025 despliege de _software_ @VanDerBurg2014, orquestación de servicios @FloxKubernetesUncontained o entornos de desarrollo @replitReplitHowWe2021. 
 
-¿Por que Nix de todas Las herramientas?\
-Porque ha demostrado ser una herramienta muy poderasa, y que la comunidad ama a pesar de su dificultad de uso.
+No obstante, a pesar de su versatilidad, Nix presenta una barrera de entrada considerable. Reportes sugieren una curva de aprendizaje pronunciada @NixCommunitySurvey2024, atribuida en parte a la complejidad de su lenguaje de configuración (Nixlang) para ciertos usuarios @fricklerhandwerk2022, aspecto que incluso su creador ha identificado como susceptible de mejora @Dolstra2018. Estas dificultades podrían estar incidiendo en su adopción relativamente limitada frente a herramientas comparables, como Docker @stackoverflowMostPopularTechnologies.
 
-¿Y porque es dificil de usar?\
-mala documentacion, mal lenguaje, y contar con un paradigma funcional. Es en este ultimo en que quiero enfocar. Y eso afecta el DevEx
+Nixlang es la principal interfaz para interactuar con el ecosistema Nix, es un lenguaje de dominio específico (DSL por sus siglas en inglés) diseñado  directamente para expresar los constructos de la herramienta, y es, en gran medida, responsable de la flexibilidad que la caracteriza @NixdevDocumentation. Sin embargo, esta misma especialización introduce complejidades que afectan su accesibilidad y usabilidad @Dolstra2018. Como respuesta, la comunidad ha explorado diversas estrategias para mitigar estas limitaciones, como : extensiones al lenguaje, como la incorporación de tipado estático —esfuerzos que han sido abandonados debido a su complejidad técnica— @caddetNixNickel @hufschmittCurrentStatePtyx; agentes de inteligencia artificial para generar configuraciones, aún sin validación empírica sólida en términos de usabilidad @Schwaighofer2026; y, en un enfoque más radical, la sustitución de Nixlang por Guile, un lenguaje de propósito general @Courts2013, aunque tampoco es un lenguaje muy conocido @stackoverflowMostPopularTechnologies, sabiendo que pertenece a la familia de Lisp @IntroductionGuileReference.
 
-¿Porque el lenguaje de programación?\
-Porque es con el que mas estaras interactuando en tu dia a dia, y la principal interfaz para interactuar con nix. Es por eso que lo quiero llevar a un lenguaje general.
+En base a las propuestas anteriores se hizó un análisis comparativo (véase @Appendix1), donde se observa que las soluciones existentes tienden a introducir nuevas fuentes de complejidad o dependen de factores externos, sin abordar las causas estructurales de la fricción en Nix; esto sugiere que un posible buen enfoque consistiría en interactuar con Nix usando un lenguaje ampliamente conocido, y Typescript encaja muy bien en ese molde dada su popularidad @stackoverflowMostPopularTechnologies y similitud sintáctica con Nixlang, siendo descrito en ocasiones como "JSON con funciones" (siendo JSON una notación usada en Typescript) @NixdevDocumentation.
 
-¿Porque un lenguaje general?\
-En la actualidad con el mercado y la variedad de lenguajes de programacion, apreder un nuevo lenguaje tan complejo como nix es complicado, herramientas como nvim con lua o aws cdk son un claro ejemplo de exito de lenguajes generales que cuentaron 
+El uso de lenguajes de propósito general para expresar dominios específicos —conocido como lenguaje de propósito específico embebido (eDSL) @vandeursenDomainspecificLanguagesAnnotated2000— no es un enfoque novedoso y ha demostrado ser efectivo en contextos similares. Un caso ilustrativo es Neovim, que en 2021 introdujo un eDSL en Lua como alternativa a Vimscript @NeovimNews112021, lo cual coincidió con un incremento notable en su interés (véase @Appendix2). En el ecosistema de Nix, existe también una propuesta de eDSL en JavaScript ; no obstante, se trata de un proyecto sin actividad reciente, limitado a un subconjunto de funcionalidades —principalmente la creación de paquetes— y sin evidencia empírica que respalde mejoras en la experiencia de desarrollo @burgNiJSInternalDSL2026.
 
-¿Porque Typescript?\
-Nix esta inpsirado fuertemente en el formato JSON proveniente de javascript, ademas que la comuniad a intentado traer tipos que mejoren la experiencia sin exito (Niquel).
+En este contexto, persiste la ausencia de una propuesta que combine un eDSL basado en un lenguaje ampliamente adoptado, con cobertura funcional mas amplia de Nixlang y validación empírica de mejoras en la experiencia de desarrollo.
 
 #pagebreak()
 
@@ -148,7 +155,7 @@ Nix esta inpsirado fuertemente en el formato JSON proveniente de javascript, ade
 
 = Marco Teórico
 
-== Despliegue de software y sus problemas
+== Despliegue de _software_ y sus problemas
 
 == Nix como una solucion
 
@@ -174,9 +181,46 @@ El construir un paquete se puede ver como una receta, el seguir los mismos pasos
 
 === Arquitectura
 
-#quote("Sección vacía")
+
+#pagebreak()
 
 = Anexos
 
+== Soluciones existentes a NixLang <Appendix1>
 
-#bibliography(title: "Referencias", ("ref.yml", "ref.bib"))
+#table(
+  columns: 4,
+  table.header[*Problema*][*Soluciones \ existentes*][*Limitaciones*][*Propuesta*],
+  [Necesidad de aprender un lenguaje exclusivo de Nix],
+  [Uso de lenguajes de propósito general (e.g., Guile en Guix)],
+  [Lenguajes poco adoptados mantienen la barrera de entrada],
+  [Adoptar un lenguaje ampliamente conocido],
+  
+  [Escasez de documentación y ejemplos],
+  [Producción centralizada de documentación],
+  [Alto costo de mantenimiento y dependencia del equipo core],
+  [Desacoplar la documentación del desarrollo del núcleo],
+  
+  [Dependencia de funciones complejas de la stdlib sin tipado],
+  [Extensiones del lenguaje para tipado estático],
+  [Alta complejidad de implementación],
+  [Delegar el tipado a herramientas externas maduras],
+  
+  [Alta complejidad general del ecosistema],
+  [Generación de código con Inteligencia Artificial],
+  [No aborda causas estructurales; depende de datos de entrenamiento],
+  [Evitar soluciones basadas en generación automática],
+  stroke: 0.5pt + black, 
+)
+
+== Popularidad <Appendix2>
+
+#figure(image("media/indice de interes de Neovim en el tiempo.png"), caption: "sdafsd")
+
+
+#pagebreak()
+#bibliography(
+  title: "Referencias", 
+  ("ref.yml", "ref.bib"), 
+  style: "ieee",
+  full: false)
