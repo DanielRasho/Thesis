@@ -22,9 +22,14 @@
 )
 
 #set heading(
-  numbering: "1.a.",
+  numbering: "1.",
 )
 #show heading: set block(below: 1em)
+
+
+#show heading.where(level: 4): it =>[
+    #block(it.body)
+]
 
 // ============ STYLES
 #show heading: it => if it.level == 1 [
@@ -71,7 +76,7 @@
 #pagebreak()
 // ============ CONTENT
 
-#outline()
+#outline(depth: 3)
 
 #set page(
   paper: "a4",
@@ -123,7 +128,7 @@ Evaluar en qué medida el uso de TypeScript como lenguaje de propósito general 
 == Específicos
 1. Conducir sesiones de pensar-en-alto con estudiantes de Ciencias de la Computación que no hayan utilizado Nix previamente, aplicando la técnica de "Programación Natural", con el fin de identificar y categorizar los principales puntos de dolor cognitivos que presenta el lenguaje de Nix.
 2. Desarrollar un EDSL en TypeScript que genere archivos de configuración, válidos en el lenguaje de Nix, cubriendo al menos las funcionalidades de la libreria estándar.
-3. Comparar el lenguaje de Nix frente a la librería desarrollada con estudiantes de Ciencias de la Computación sin experiencia previa en Nix, mediante sesiones de pensar-en-alto y la aplicación de los instrumentos SDFS-2 (motivación), IMI (motivación intrínseca) y DEXI (experiencia de desarrollo), analizando las diferencias entre ambas soluciones a través de Mann-Whitney.
+3. Comparar el lenguaje de Nix frente a la librería desarrollada con estudiantes de Ciencias de la Computación sin experiencia previa en Nix, mediante un cuestionario estructurado y la aplicación de los instrumentos Short AttrakDiff 2 y DEXI, analizando las diferencias entre ambas soluciones a través de Mann-Whitney.
 
 #pagebreak()
 
@@ -147,39 +152,188 @@ En este contexto, persiste la ausencia de una propuesta que combine un eDSL basa
 
 = Metodología
 
+La investigación se divide en tres fases ejecutadas de forma secuencial, con el
+objetivo de desarrollar y evaluar un lenguaje de dominio específico embebido
+(eDSL, por sus siglas en inglés) en TypeScript como alternativa al lenguaje de
+configuración original de Nix (en adelante, Nixlang).
+
++ *Fase 1*: Investigación cualitativa preliminar para identificar los puntos de
+  dolor cognitivos y oportunidades de diseño que presenta Nixlang.
++ *Fase 2*: Desarrollo del eDSL en TypeScript a partir de los hallazgos de la
+  Fase 1, con capacidad de generar código Nixlang válido.
++ *Fase 3*: Evaluación comparativa entre Nixlang y el eDSL desarrollado,
+  midiendo diferencias en comprensión cognitiva y experiencia de desarrollo.
+
+\
+== Consideraciones éticas generales
+
+Todas las fases que involucran participantes humanos se rigen por los siguientes
+principios:
+
+- *Participación voluntaria*: La participación es completamente voluntaria. Los
+  participantes pueden retirarse en cualquier momento sin consecuencia alguna.
+- *Mayoría de edad*: Todos los participantes deben ser mayores de 18 años.
+- *Anonimización*: Los datos recolectados serán disociados de la identidad de
+  los participantes mediante el uso de códigos de identificación internos. Ningún
+  dato publicado o analizado contendrá información que permita identificar a los
+  participantes. Las transcripciones de los fragmentos verbales citados en el
+  análisis serán igualmente anonimizadas.
+- *Confidencialidad*: Los datos serán almacenados en dispositivos protegidos con
+  contraseña, accesibles únicamente por el equipo investigador.
+- *Destrucción de datos sensibles*: Las grabaciones de pantalla y voz obtenidas
+  durante las sesiones serán destruidas una vez concluido el análisis de datos.
+  Las transcripciones anonimizadas podrán conservarse como parte del registro
+  de investigación.
+- *Compensación*: Como agradecimiento por su tiempo, los participantes recibirán
+  una compensación simbólica en forma de un dulce al finalizar la sesión. Esta
+  compensación no condiciona la participación ni sus respuestas.
+
+Antes de empezar todos los participantes se les solicitara aceptar un *Consentimiento informado* en el cual el equipo investigador se compromete a cumplir los puntos anteriores.
+
+\
+== Fase 1: Investigación preliminar
+
+=== Perfil de los participantes
+
+Se reclutarán estudiantes de Ciencias de la Computación con poca/nula experiencia en Nix o empaquetado de aplicaciones.
+
+=== Instrumentos
+
+- *Formulario de perfil*: Recoge datos sobre la experiencia previa del
+  participante con herramientas de gestión de paquetes y lenguajes de
+  programación, así como su edad y semestre cursado.
+- *Formulario de programación natural*: Presenta al participante una serie de
+  problemas relacionados con el dominio del empaquetado de aplicaciones,
+  solicitándole que describa con sus propias palabras un algoritmo para
+  resolverlos. Está basado en la técnica de Programación Natural
+  @panePDFMoreNatural2006, y se entrega de forma impresa junto con hojas en
+  blanco para que el participante responda libremente.
+- *Guía rápida de Nix*: Resumen de la sintaxis de Nixlang basado en la
+  documentación oficial @NixdevDocumentation, presentado después del formulario
+  de programación natural para evitar que el conocimiento del lenguaje influya
+  en las respuestas previas.
+- *Guía de actividades de pensar en alto*: Conjunto de tareas a resolver con
+  Nixlang, siguiendo el protocolo de pensar en alto @PDFThinkAloud.
+
+=== Procedimiento
+
+Antes de iniciar la sesión, el participante lee y firma el consentimiento
+informado y completa el formulario de perfil.
+
+A continuación, se entrega el formulario de programación natural de forma
+impresa. Esta actividad se realiza antes de presentar cualquier material sobre
+Nixlang, con el propósito de capturar la intuición natural del participante sin
+sesgo previo de exposición al lenguaje.
+
+Una vez completado el formulario, se presenta la guía rápida de Nix para que el
+participante pueda familiarizarse con las estructuras y reglas del lenguaje.
+
+Por último, se inicia la sesión de pensar en alto utilizando una computadora
+provista por el investigador. El participante verbaliza su proceso de
+pensamiento mientras resuelve las tareas propuestas en Nixlang. Durante esta
+sesión se graban la pantalla y el audio, previa autorización explícita en el
+consentimiento informado.
+
+=== Análisis de datos
+
+Los datos recolectados se analizaron con los siguientes objetivos: caracterizar el
+perfil de los participantes, identificar patrones en sus respuestas de
+programación natural, y categorizar los puntos de dolor cognitivos observados
+durante las sesiones de pensar en alto. Los fragmentos verbales más
+representativos pueden ser citados de forma textual en el análisis, previa
+anonimización. Los hallazgos de esta fase orientaron el diseño del eDSL en la
+Fase 2.
+
+\
+== Fase 2: Desarrollo del eDSL
+
+Con base en los hallazgos de la Fase 1, se desarrolló un eDSL en TypeScript
+capaz de generar archivos de configuración válidos en Nixlang. El diseño del
+eDSL buscó abordar directamente los puntos de dolor identificados en la fase
+anterior, cubriendo al menos las funcionalidades de la biblioteca estándar de
+Nix. Esta fase no involucró participantes humanos y el código desarrollado se encuentra bajo la licensia MIT @MITLicense.
+
+\
+== Fase 3: Evaluación comparativa
+La Fase 3 adopta el diseño metodológico de ingeniería de software empírica
+propuesto por @PDFComparisonXAML2026, adaptado al contexto de
+comparación entre un DSL (Nixlang) y un eDSL (el eDSL en TypeScript). La fase se estructura en dos partes: una
+evaluación de comprensión cognitiva mediante un cuestionario estructurado, y una
+evaluación de experiencia de desarrollo mediante instrumentos de UX.
+
+=== Perfil de los participantes
+
+Se reclutaron estudiantes de Ciencias de la Computación con poca/nula experiencia en Nix, distintos a los participantes de la Fase 1.
+
+=== Instrumentos
+
+- *Formulario de perfil*: Idéntico al utilizado en la Fase 1. Incluye una
+  autoevaluación del nivel general de programación, experiencia en TypeScript y
+  familiaridad previa con DSLs.
+- *Tutoriales de Nixlang y eDSL*: Presentación del dominio del problema (gestión y
+  empaquetado de aplicaciones) y de la sintaxis de Nixlang y el eDSL desarrollado, con ejemplos
+  representativos.
+- *Cuestionarios de comprensión cognitiva*: Instrumentos estructurado con
+  preguntas que evalúaran el uso de Nixlang y el eDSL en tres categorías cognitivas basadas en el marco de
+  Dimensiones Cognitivas @PDFComparisonXAML2026:
+  - *Aprendizaje*: Selección de declaraciones sintácticamente correctas y
+    programas válidos para un resultado dado.
+  - *Percepción*: Identificación de constructos del lenguaje y
+    significados correctos de programas.
+  - *Evolución*: Preguntas de tipo ensayo donde se solicita al
+    participante expandir, eliminar o modificar la funcionalidad de código
+    existente.
+  Además tambien se mide el tiempo de respuesta y tasa de éxito.
+
+- *DEXI (Indice de Experiencia de Desarrollo)*: Instrumento para medir la experiencia de
+  desarrollo @Kuusinen2016.
+- *AttrakDiff-2 corto*: Instrumento para evaluar los aspectos hedónicos y emocionales de
+    la experiencia con ambas herramientas @PDFNeedsAffect.
+- *OUX (Evaluación general de la experiencia de usuario)*: Cuestionario para medir la percepción general de le experiencia de usuario usando una escala de Likert de 7 puntos basado en @Kuusinen2016.
+
+=== Diseño experimental
+
+Los participantes se dividieron en 2 grupos, la primera mitad interactuando con Nixlang y la segunda con el eDSL desarrollado. 
+
+=== Procedimiento
+
+El participante firma el consentimiento informado y completa el formulario de
+perfil. A continuación, se le presenta el tutorial correspondiente a la herramienta correspondiente a su grupo. Una vez revisado el
+material, el participante responde el cuestionario de comprensión cognitiva de
+esa condición. 
+
+Al concluir la herramienta, el participante completa los
+cuestionarios DEXI, OUX y AttrakDiff. Estos instrumentos se aplican una única
+vez al final de la sesión, evaluando de forma retrospectiva la experiencia con la herramienta.
+
+=== Métricas y análisis de datos
+
+==== Comprensión cognitiva
+
+Para cada cuestionario se calcula la tasa de éxito $S_j$, definida como el
+porcentaje promedio de respuestas correctas para cada pregunta $j$. Las
+dimensiones cognitivas se evalúan mediante la fórmula:
+
+$ D_i = sum_(j=1)^(N) frac(Q_(i j) dot S_j, C_j) $
+
+Donde N es la cantidad de participantes, $Q_(i j)$ indica si la dimensión $i$ está asociada a la pregunta $j$,
+$S_j$ es la tasa de éxito en la pregunta $j$, y $C_j$ es el número de
+dimensiones relevantes para esa pregunta @PDFComparisonXAML2026. Las dimensiones evaluadas
+incluyen: cercanía de mapeo, viscosidad, dependencias
+ocultas, operaciones mentales difíciles, difusión y
+expresividad de rol @PDFCognitiveDimensions.
+
+==== Experiencia de desarrollo
+
+Las diferencias entre condiciones en los instrumentos DEXI, OUX y AttrakDiff se
+analizan mediante la prueba no paramétrica de Mann-Whitney, apropiada dado el
+tamaño reducido de la muestra.
 #pagebreak()
 
 = Plan de Trabajo
 
 #pagebreak()
 
-= Marco Teórico
-
-== Despliegue de _software_ y sus problemas
-
-== Nix como una solucion
-
-El construir un paquete se puede ver como una receta, el seguir los mismos pasos e ingredientes debería dar el mismo resultado, para asegurarse que se usan los mismos ingredientes se les puede asignar un identificador único a cada uno, al ser único varios ingredientes pueden coexistir en el mismo entorno global sin conflictos (manejadores de paquetes); a su vez para asegurar que se siguen los mismos pasos, el paquete, debe ser construido en un entorno aislado donde, como los entornos virtuales; 
-
-=== Soluciones comunes del mercado
-
-=== Funcionamiento general (como se diferencia del resto)
-
-=== Flakes
-
-== Experiencia de Desarrollo (DevEx)
-
-=== Que es (es una cualidad mostrada como abandonada)
-
-=== Porque es importante
-
-=== Como se mide
-
-=== Intentos para mejorar Nix
-
-=== Transpiladores
-
-=== Arquitectura
 
 
 #pagebreak()
