@@ -332,8 +332,97 @@ tamaño reducido de la muestra.
 
 = Plan de Trabajo
 
-#pagebreak()
+Para poder llevar a cabo la investigación las diferentes fases fueron divididas en tareas más pequeñas y se calendarizaron luego en el siguiente cronograma.
 
+#let phases = (
+  (
+    label: "Fase 1 · Investigación preliminar",
+    color: rgb("#CEDFFF"),
+      text-color: rgb("#000"),
+    bar-color: rgb("#5484DF"),
+    tasks: (
+      ("Diseño de instrumentos",          (1, 2)),
+      ("Reclutamiento participantes",      (3, 3)),
+      ("Sesiones pensar-en-alto y programacion natural",          (4, 4)),
+      ("Análisis cualitativo de las sesiones",          (5, 5)),
+    ),
+  ),
+  (
+    label: "Fase 2 · Desarrollo eDSL",
+    color: rgb("#C8EEC6"),
+    text-color: rgb("#000"),
+    bar-color: rgb("#42B33C"),
+    tasks: (
+      ("Diseño arquitectura eDSL",         (6, 7)),
+      ("Implementación core eDSL",         (8, 10)),
+      ("Cobertura stdlib Nix",             (10, 12)),
+      ("Pruebas y validación",             (12, 13)),
+    ),
+  ),
+  (
+    label: "Fase 3 · Evaluación comparativa",
+    color: rgb("#FAECE7"),
+    text-color: rgb("#000"),
+    bar-color: rgb("#D85A30"),
+    tasks: (
+      ("Diseño cuestionarios cognitivos",  (14, 14)),
+      ("Reclutamiento participantes",      (14, 14)),
+      ("Sesiones evaluación cognitiva",    (15, 15)),
+      ("Sesiones AttrakDiff / DEXI / OUX", (15, 15)),
+      ("Análisis estadístico",             (16, 17)),
+      ("Síntesis de resultados",           (17, 18)),
+    ),
+  ),
+)
+
+#let total-weeks = 18
+#let cell-width = 1.6em
+
+#let gantt-row(task-name, span, bar-color) = {
+  let (start, end) = span
+  (
+    table.cell(align: left + horizon)[#text(size: 8pt)[#task-name]],
+    ..range(1, total-weeks + 1).map(w => {
+      if w >= start and w <= end {
+        table.cell(fill: bar-color)[]
+      } else {
+        table.cell()[]
+      }
+    })
+  )
+}
+
+#figure(
+table(
+  columns: (10em, ..range(total-weeks).map(_ => cell-width)),
+  rows: auto,
+  stroke: (x, y) => (
+    left: if x == 0 { 0.5pt + gray } else { none },
+    right: if x == total-weeks { 0.5pt + gray } else { none },
+    top: 0.4pt + luma(220),
+    bottom: 0.4pt + luma(220),
+  ),
+  inset: (x: 3pt, y: 4pt),
+
+  // Header row
+  table.cell(align: left + horizon)[#text(weight: "bold", size: 8pt)[Tarea]],
+  ..range(1, total-weeks + 1).map(w =>
+    table.cell(align: center + horizon)[#text(size: 7pt, weight: "bold")[#w]]
+  ),
+
+  // Phases and tasks
+  ..phases.map(phase => (
+    table.cell(
+      colspan: total-weeks + 1,
+      fill: phase.color,
+      align: left + horizon,
+    )[#text(weight: "bold", size: 8pt, fill: phase.text-color)[#phase.label]],
+    ..phase.tasks.map(task => {
+      let (name, span) = task
+      gantt-row(name, span, phase.bar-color)
+    }).join()
+  )).join()
+), caption: [Diagrama de Gannt de la ejecución de tareas a lo largo del tiempo])
 
 
 #pagebreak()
