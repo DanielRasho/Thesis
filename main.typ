@@ -94,25 +94,25 @@ Sin embargo, a pesar de sus capacidades prometedoras, Nix no ha gozado de la mis
 
 = Introducción
 
-El distribuir _software_ de las cocinas de los ingenieros a las mesas de los usuarios finales sido una tarea sencilla  @mantylaSoftwareDeploymentActivities2011, los artefactos de _software_ se comportan igual a las plantas exóticas cuando son transplantadas a un hábitat diferente al que están acostumbradas: se marchitan @Dolstra2006. Como las plantas, el _software_ "crece y evoluciona" en el _hardware_, sistema operativo y librerias específicas, de la computadora del ingeniero, pero en el momento que esos artefactos son llevados a los ecosistemas extraños, que son los dispositivos de los usuarios finales, el que funcione o no se vuelve una apuesta ante la que no se tiene control... o si? @Dolstra2006.
+El distribuir _software_ de las cocinas de los ingenieros a las mesas de los usuarios finales no ha sido una tarea sencilla  @mantylaSoftwareDeploymentActivities2011, los artefactos de _software_ se comportan igual a las plantas exóticas cuando son transplantadas a un hábitat diferente al que están acostumbradas: se marchitan @Dolstra2006. Como las plantas, el _software_ "crece y evoluciona" en el _hardware_, sistema operativo y librerias específicas, de la computadora del ingeniero, pero en el momento que esos artefactos son llevados a los ecosistemas extraños, que son los dispositivos de los usuarios finales, el que funcione o no se vuelve una apuesta ante la que no se tiene control... o si? @Dolstra2006.
 
 El problema anteriormente descrito, es el sujeto de estudio del campo de "Manejo de Configuracion de _Software_" (o CSM por sus siglas en íngles), donde se reconoce que la ejecucición correcta de _software_ no solamente depende de su código fuente, sino del contexto que le rodea @Dolstra2006. Con los años se ha desarrollado una familia de _software_, llamada *manejadores de paquetes* responsable de modificar el entorno global de las computadoras objetivo para conseguir las condiciones ideales para cada aplicación. Al día de hoy se han convertido en una familia tan variada que se han vuelto una característica diferenciadora en las diferentes distribuciones de Linux o lenguajes de programación @Gibb2026. Una corriente opuesta es la *virtualización*, que consiste en empaquetar las aplicaciones junto a los entornos completos que necesitan y ejecutarlas de forma aislada, soluciones de este tipo son muy usadas en servicios de la nube @PDFInfrastructureCode.
 
-Sin embargo, como se ilustra en la @figura1, los manejadores de paquetes lidian con el problema que intentar satisfacer a varias aplicaciones en un entorno global puede llevar a conflictos irresolubles: cuando FOO y BAR dependen de versiones distintas de Node, el entorno global obliga a elegir una sola versión compatible (Node v23.8). La virtualización elimina ese conflicto permitiendo que cada aplicación lleve su propia versión, pero a cambio puede duplicar dependencias compartidas como Clang 19.2 @Zwinger2026, incrementando el consumo de almacenamiento @Sobieraj2024 @Lingayat2018.
+Sin embargo, como se ilustra en la @figura1, los manejadores de paquetes lidian con el problema que intentar satisfacer a varias aplicaciones en un entorno global puede llevar a conflictos irresolubles: cuando `FOO` y `BAR` dependen de versiones distintas de Node, el entorno global obliga a elegir una sola versión compatible (Node v23.8). La virtualización elimina ese conflicto permitiendo que cada aplicación lleve su propia versión en entornos separados, pero a cambio puede duplicar dependencias compartidas como Clang 19.2 @Zwinger2026, incrementando el consumo de almacenamiento @Sobieraj2024 @Lingayat2018.
 
 #figure(image("media/Figure1.svg"), caption: [
-  Dependencias compartidas con manejador de paquetes vs. virtualización.
+  Dependencias de dos programas ficticios `FOO` y `BAR` en manejadores de paquetes vs. virtualización.
 ])<figura1>
 
-_La unión hace la fuerza_, dando origen en 2003 a Nix como una tercera alternativa que fusiona ideas de ambas corrientes partiendo de la idea que: Usar los mismos ingredientes y pasos debería producir el mismo resultado sin importar la computadora. Nix garantiza lo primero mediante identificadores (ID) únicos que, como se ve en la @figura2, permiten la coexistencia de versiones distintas del mismo paquete y la reutilización de dependencias compartidas; y lo segundo mediante entornos aislados que aseguran la reproducibilidad @Dolstra2006. La elegancia de Nix reside en cómo construye estos identificadores y entornos aislados.
+_La unión hace la fuerza_, dando origen en 2003 a Nix como una tercera alternativa que fusiona ideas de ambas corrientes partiendo de la idea que: Usar los mismos ingredientes y pasos debería producir el mismo resultado sin importar la computadora. Nix garantiza lo primero mediante identificadores (ID) únicos en un entorno aislado (_Nix Store_) que, como se ve en la @figura2, permiten la coexistencia de versiones distintas del mismo paquete y la reutilización de dependencias compartidas, resolviendo los problema previos de `FOO` y `BAR`; y lo segundo mediante entornos aislados que aseguran la reproducibilidad @Dolstra2006. La elegancia de Nix reside en cómo construye estos identificadores y entornos aislados.
 
 #figure(image("media/Figure2.svg", width: 70%), caption: [
-  El _Nix store_ con identificadores únicos permite coexistencia y reutilización de paquetes.
+  Manejo de paquetes en Nix con identificadores únicos permite coexistencia y reutilización de paquetes.
 ])<figura2>
 
 Fue esta enfoque centrado en seguir recetas explícitas que permitió a Nix conseguir una serie de hitos importantes al contar con unos de los repositorios de paquetes generales más grandes de Linux @marakasovRepositoryStatistics, de los cuales 700 mil han demostrado poder replicarse de forma binariamente identica en diferentes computadoras @Malka2025. Aconteció que mucha de las ideas podían generalizarse hasta al punto de reproducir casi por completo un sistema operativo, dando origen a la distribución NixOS @Dolstra2008.
 
-A pesar de ello , Nix ha gozado de una adopción bastante reducida en comparación a las otras herramientas discutidas @stackoverflowMostPopularTechnologies ¿Cuál es entonces su talón de Aquiles? Tal parece que no son necesariamente problemas técnicos, sino de experiencia de uso; en encuestas hechas en el foro oficial, la comunidad resaltaba problemas importantes con la documentación, errores crípticos y un _Domain Specific Language_ (DSL) díficil de dominar @2022NixSurvey2022 @NixCommunitySurvey2023; además, en otra encuesta, se estimó que los usuarios perciben requerir un tiempo de 5 años para dominar la herramienta a pesar que la mayoría lo usa a diario. Llevando a un raro caso donde a pesar que la comunidad le encanta la idea detrás de Nix @NixCommunitySurvey2024  sus problemas de usabilidad son tan severos que impiden su uso, lo que concuerda con observaciones de otros estudio en herramientas son situaciones similares @goodwinFunctionalityUsability1987.
+A pesar de ello , Nix ha gozado de una adopción bastante reducida en comparación a las otras herramientas discutidas @stackoverflowMostPopularTechnologies ¿Cuál es entonces su talón de Aquiles? Tal parece que no son necesariamente problemas técnicos, sino de experiencia de uso; en encuestas hechas en el foro oficial, la comunidad resaltaba problemas importantes con la documentación, errores crípticos y un _Domain Specific Language_ (DSL) díficil de dominar @2022NixSurvey2022 @NixCommunitySurvey2023; además, en otra encuesta, se estimó que los usuarios perciben requerir un tiempo de 5 años para dominar la herramienta a pesar que la mayoría lo usa a diario. Llevando a un raro caso donde a pesar que la comunidad le encanta la idea detrás de Nix @NixCommunitySurvey2024  sus problemas de usabilidad son tan severos que podrían estar impidiendo su uso, lo que concuerda con observaciones de otros estudio en herramientas son situaciones similares @goodwinFunctionalityUsability1987.
 
 El concepto que los desarrolladores también son usuarios dio origen al campo de estudio de Experiencia de Desarrollo (o DX por sus siglas en inglés), donde el estudio sobre como los desarrolladores perciben sus herramientas ha sido un tema frecuente @Razzaq2024 sobre el que ya se han desarrollado algunos instrumentos como DEXI para evaluar dichas dimensiones@Kuusinen2016. Y dado el trayecto de intentos por mejorar la DX en Nix #cite-range("caddetNixNickel", "gagarinFourMonthsNix", "hufschmittCurrentStatePtyx", "fricklerhandwerk2022") el presente trabajo, busca ser una aplicación de las técnicas aprendidas en el campo de DX, en conjunto con el diseño de lenguajes, para evaluar si un Lenguaje de Proposito Específico Embebido (eDSL por sus siglas en inglés) en Typescript @Typescript podría ayudar a reducir la barra de entrada para nuevos desarrolladores en la herramienta.
 
@@ -126,7 +126,7 @@ Evaluar si un eDSL en TypeScript reduce la barrera de entrada a Nix —referente
 == Específicos
 1. Identificar los principales puntos de dolor cognitivos que presenta el lenguaje de Nix, para fundamenter el diseño de un eDSL, mediante sesiones de pensar-en-alto y "Programación Natural" con estudiantes de Ciencias de la Computación que no hayan utilizado Nix previamente.
 2. Desarrollar un eDSL en TypeScript que sirva de prototipo funcional para la evaluación comparativa, capaz de generar archivos de configuración en Nixlang, cubriendo al menos las funcionalidades de la libreria estándar, verificado con una batería de pruebas.
-3. Comparar Nixlang frente al eDSL desarrollado, para determinar si la familiaridad con Typescript reduce la carga cognitiva de adopción mediante un cuestionario estructurado, y el uso de Short AttrakDiff 2 y DEXI aplicados a estudiantes de Ciencias de la Computación sin experiencia previa, TODO: con análisis estadístico Mann-Whitney.
+3. Comparar Nixlang frente al eDSL desarrollado, para determinar si la familiaridad con Typescript reduce la carga cognitiva de adopción mediante un cuestionario estructurado, y el uso de Short AttrakDiff 2 y DEXI aplicados a estudiantes de Ciencias de la Computación sin experiencia previa, con análisis de diferencia estadística.
 
 #pagebreak()
 
@@ -136,7 +136,7 @@ Con el crecimiento del mercado de los servicios de infrastructura como código @
 
 Por medio de su lenguaje de configuración, Nix permite describir: la construcción, instalación y composición de paquetes de _software_ @Dolstra2006, habilidad que se ha mostrado aplicable en configuración de ambientes de Computacion de Alto Rendimiento @guilloteauPainlessTranspositionReproducible2022 @Gomez2020, sistemas operativos @Thiberg2025 despliege de _software_ @VanDerBurg2014, orquestación de servicios @FloxKubernetesUncontained o entornos de desarrollo @replitReplitHowWe2021. 
 
-No obstante, a pesar de su versatilidad, Nix presenta una barrera de entrada considerable. Reportes sugieren una curva de aprendizaje pronunciada @NixCommunitySurvey2024, atribuida en parte a la complejidad de su lenguaje de configuración (Nixlang) para ciertos usuarios @fricklerhandwerk2022, aspecto que incluso su creador ha identificado como susceptible de mejora @Dolstra2018. Estas dificultades podrían estar incidiendo en su adopción relativamente limitada frente a herramientas como Docker @stackoverflowMostPopularTechnologies.
+No obstante, a pesar de su versatilidad, Nix presenta una barrera de entrada considerable. Reportes sugieren una curva de aprendizaje pronunciada @NixCommunitySurvey2024, atribuida en parte a la complejidad de su lenguaje de configuración (Nixlang) para ciertos usuarios @fricklerhandwerk2022, aspecto que también su creador ha identificado como susceptible de mejora @Dolstra2018. Estas dificultades podrían estar incidiendo en su adopción relativamente limitada frente a herramientas como Docker @stackoverflowMostPopularTechnologies.
 
 Nixlang es la principal interfaz para interactuar con el ecosistema Nix, es un lenguaje de dominio específico (DSL por sus siglas en inglés) diseñado  directamente para expresar los constructos de la herramienta, y es, en gran medida, responsable de la flexibilidad que la caracteriza @NixdevDocumentation. Sin embargo, esta misma especialización introduce complejidades que afectan su accesibilidad y usabilidad @Dolstra2018. Como respuesta, la comunidad ha explorado diversas estrategias para mitigar estas limitaciones, como : extensiones al lenguaje, con la incorporación de tipado estático —esfuerzos que han sido abandonados debido a su complejidad técnica— @caddetNixNickel @hufschmittCurrentStatePtyx; agentes de inteligencia artificial para generar configuraciones, aún sin validación empírica sólida en términos de usabilidad @Schwaighofer2026; y, en un enfoque más radical, la sustitución del lenguaje por Guile, un lenguaje de propósito general @Courts2013, aunque tampoco es un lenguaje muy conocido @stackoverflowMostPopularTechnologies, sabiendo que pertenece a la familia de Lisp @IntroductionGuileReference.
 
@@ -155,16 +155,17 @@ objetivo de desarrollar y evaluar un lenguaje de dominio específico embebido
 (eDSL, por sus siglas en inglés) en TypeScript como alternativa al lenguaje de
 configuración original de Nix (en adelante, Nixlang).
 
-
 \
-== Consideraciones éticas generales
-
+== Confidencialidad y Seguridad
 Todas las fases que involucran participantes humanos se rigen por los siguientes
 principios:
-
 - *Participación voluntaria*: La participación es completamente voluntaria. Los
   participantes pueden retirarse en cualquier momento sin consecuencia alguna.
 - *Mayoría de edad*: Todos los participantes deben ser mayores de 18 años.
+- *Riesgos*: La participación conlleva riesgos mínimos. Los participantes podrían
+  experimentar leve fatiga cognitiva o incomodidad al verbalizar su razonamiento
+  durante las tareas. Para minimizarlos, las sesiones tienen una duración acotada,
+  el participante puede solicitar pausas en cualquier momento.
 - *Anonimización*: Los datos recolectados serán disociados de la identidad de
   los participantes mediante el uso de códigos de identificación internos. Ningún
   dato publicado o analizado contendrá información que permita identificar a los
@@ -175,20 +176,24 @@ principios:
 - *Destrucción de datos sensibles*: Las grabaciones de pantalla y voz obtenidas
   durante las sesiones serán destruidas una vez concluido el análisis de datos.
   Las transcripciones anonimizadas podrán conservarse como parte del registro
-  de investigación.
+  de investigación por un período de 15 semanas tras su recolección.
+- *Responsable del resguardo de datos*: Es autor principal de este estudio.
 - *Compensación*: Como agradecimiento por su tiempo, los participantes recibirán
-  una compensación simbólica en forma de un dulce al finalizar la sesión. Esta
+  una compensación simbólica en forma de un caramelo al finalizar la sesión. Esta
   compensación no condiciona la participación ni sus respuestas.
-
-Antes de empezar todos los participantes se les solicitara aceptar un *Consentimiento informado* en el cual el equipo investigador se compromete a cumplir los puntos anteriores.
+Antes de empezar, todos los participantes deberán leer y firmar un
+*Consentimiento Informado* en el cual el equipo investigador se compromete a
+cumplir los puntos anteriores. El formato utilizado se adjunta como anexo.
 
 \
-== Fase 1: Investigación preliminar
-El propósito de la primera fase es identificar los puntos de dolor que cuenta Nixlang, siendo la base para construir una solución los reduzca.
+== Fase 1: Investigación preliminar <phase1>
+El propósito de la primera fase es identificar los puntos de dolor que cuenta Nixlang, siendo la base para construir una solución los reduzca, a travez de un estudio cualitativo exploratorio.
 
-=== Perfil de los participantes
+=== Población y muestra
 
-Se reclután estudiantes de Ciencias de la Computación con poca/nula experiencia en Nix o empaquetado de aplicaciones.
+Se seleccionan estudiantes de Ciencias de la Computación de entre 18 y 24 años con experiencia limitada o nula en Nix y en el empaquetado de aplicaciones. Esta población fue elegida porque, según la encuesta más reciente de la comunidad Nix , representa el segundo grupo de usuarios más numeroso por edad (26.6%)@NixCommunitySurvey2024. Además, su perfil principiante permite evaluar las barreras de aprendizaje y los desafíos de usabilidad de Nixlang durante las etapas iniciales de adopción.
+
+Se usa una muestra de N=10 participantes fundamenta en dos precedentes: un estudio pensar-en-alto sobre la experiencia de onboarding en Nix @fricklerhandwerk2022, que empleó la misma metodología con usuarios principiantes y produjo hallazgos relevantes sobre usabilidad de documentación, y un estudio de programación natural @paneStudyingLanguageStructure2001 que utilizó N = 14 para examinar cómo usuarios sin experiencia previa abordan tareas de programación; así como con estudio de saturación de relevancia en evaluaciones de usabilidad @wutichSampleSizes102024. Dado el carácter exploratorio y cualitativo de esta fase, dicho tamaño muestral es apropiado, sin pretensiones de generalización estadística.
 
 === Instrumentos
 
@@ -248,13 +253,15 @@ Nix. Esta fase no involucra participantes humanos y el código fuente se encuent
 
 \
 == Fase 3: Evaluación comparativa
-La Fase 3 adopta el diseño metodológico de ingeniería de software empírica
+La Fase 3 adopta un estudio cuantitativo basado en la ingeniería de software empírica
 propuesto por @PDFComparisonXAML2026, adaptado al contexto de
 comparación entre un DSL (Nixlang) y un eDSL en TypeScript. La fase se estructura en dos partes: una evaluación de comprensión cognitiva mediante un cuestionario estructurado, y una evaluación de experiencia de desarrollo mediante instrumentos de UX.
 
-=== Perfil de los participantes
 
-Se reclutan estudiantes de Ciencias de la Computación con poca/nula experiencia en Nix, distintos a los participantes de la Fase 1.
+=== Población y muestra
+Se reclutaron participantes con el mismo perfil que la Fase 1 (@phase1): estudiantes de Ciencias de la Computación con escasa o nula experiencia en Nix. Dado el carácter exploratorio del estudio y las limitaciones prácticas propias de una investigación a escala de tesis, se permitió la participación de sujetos que hubiesen tomado parte en la Fase 1, considerando que ambas fases estuvieron separadas por un período de 3 meses y que las tareas fueron diseñadas de forma independiente, minimizando así posibles efectos de aprendizaje directo. No obstante, esto constituye una limitación del estudio.
+
+Se usa una muestra de N = 20 fue obtenido mediante un análisis de potencia realizado en G*Power @GPower para diseños intra-sujetos ccomparando medias, asumiendo un tamaño de efecto grande (dz = 0.8, α = 0.05, potencia = 0.90), el cual arrojó un mínimo de 19 participantes, redondeado a 20. Los resultados deben interpretarse en consecuencia y replicarse en trabajos futuros con muestras de mayor tamaño.
 
 === Instrumentos
 
@@ -284,18 +291,10 @@ Se reclutan estudiantes de Ciencias de la Computación con poca/nula experiencia
 
 === Diseño experimental
 
-Los participantes se dividieron en 2 grupos, la primera mitad interactuando con Nixlang y la segunda con el eDSL desarrollado. 
-
+Se empleó un diseño intra-sujetos en el que cada participante interactuó con ambas herramientas: Nixlang y el eDSL desarrollado. El orden de presentación fue contrabalanceado, de modo que la mitad de los participantes comenzó con Nixlang y la otra mitad con el eDSL, con el fin de controlar posibles efectos de orden. Cada herramienta fue evaluada en una sesión independiente, pudiendo realizarse en días distintos, con el fin de adaptarse a la disponibilidad de los participantes.
 === Procedimiento
 
-El participante firma el consentimiento informado y completa el formulario de
-perfil. A continuación, se le presenta el tutorial correspondiente a la herramienta correspondiente a su grupo. Una vez revisado el
-material, el participante responde el cuestionario de comprensión cognitiva de
-esa condición. 
-
-Al concluir la herramienta, el participante completa los
-cuestionarios DEXI, OUX y AttrakDiff. Estos instrumentos se aplican una única
-vez al final de la sesión, evaluando de forma retrospectiva la experiencia con la herramienta.
+Al inicio de cada sesión, el participante firma el consentimiento informado si es su primera sesión, o confirma su continuidad si es la segunda, y completa el formulario de perfil correspondiente. A continuación, se le presenta el tutorial de la herramienta asignada para esa sesión. Una vez revisado el material, el participante resuelve las tareas propuestas y responde el cuestionario de comprensión cognitiva para esa condición. Inmediatamente al finalizar, completa los cuestionarios DEXI, OUX y AttrakDiff evaluando su experiencia con dicha herramienta. Este procedimiento se repite de forma idéntica en la sesión correspondiente a la segunda herramienta.
 
 === Métricas y análisis de datos
 
@@ -472,10 +471,10 @@ table(
   [Escasez de documentación y ejemplos],
   [Reescritura de la documentación en un lugar centralizado],
   [Alto costo de mantenimiento y dependencia de aprobación ],
-  [Generar documentacion a partir del código en si],
+  [Que la estructura del código en sí permite su documentación como el tipado estático],
   
   [@caddetNixNickel \ @hufschmittCurrentStatePtyx],
-  [Dependencia de funciones complejas de las ],
+  [Dependencia de funciones de la libreria estándar con muchos parámetros no documentados.],
   [Extensiones al lenguaje para tipado estático],
   [Alta complejidad de implementación],
   [Delegar el tipado a herramientas externas maduras],
@@ -494,6 +493,6 @@ caption: "Una tabla comparativa sobre algunas de las soluciones propuestas por l
 Con datos extraídos de Google Trends para la búsqueda “Neovim - Programa” en su modo clásico, se obtuvieron series históricas correspondientes a los últimos años. Los datos utilizados se muestran en @googleNeovimInterestTrends.
 
 #figure(
-image("media/indice de interes de Neovim en el tiempo.png", width: 80%),
+image("media/indice de interes de Neovim en el tiempo.png", width: 74%),
 caption: [Índice de interés de búsqueda de Neovim en Google entre 2014 y 2026. Se observa un aumento a finales de 2021, aproximadamente seis meses después de la introducción del soporte para Lua @NeovimNews112021.]
 )
