@@ -6,3 +6,6 @@ Devs are users to: The case of Nix
 - El calcular cuantos participantes se requiere para el estudio puede formar parte de la metodología.
 
 - 
+
+
+INSTALAR ASPEL
