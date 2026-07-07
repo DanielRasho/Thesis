@@ -22,7 +22,7 @@ jobs:
         run: mkdir github-pages-temp
 
       - name: Build example
-        run: typst compile example.typ github-pages-temp/example.pdf
+        run: typst compile main.typ github-pages-temp/example.pdf
 
       - name: Upload site files as artifact
         id: deployment
