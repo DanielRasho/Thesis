@@ -1,46 +1,44 @@
 name: Build and publish paper
-
 on:
   push:
     branches: [master]
   workflow_dispatch:
-
 permissions:
   contents: read
   pages: write
   id-token: write
-
 concurrency:
   group: pages
   cancel-in-progress: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v6
-
       - uses: typst-community/setup-typst@v5
-
       - run: typst compile main.typ paper.pdf
+      - name: Create output dir
+        # Note: `github-pages-temp` should not exist yet
+        run: mkdir github-pages-temp
 
-      - run: |
-          mkdir public
-          cp paper.pdf public/
+      - name: Build example
+        run: typst compile example.typ github-pages-temp/example.pdf
 
-      - uses: actions/upload-pages-artifact@v4
+      - name: Upload site files as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v4
         with:
-          path: public
-
+          path: github-pages-temp
   deploy:
     needs: build
-    runs-on: ubuntu-latest
 
+    # Deploy to the github-pages environment
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
+    runs-on: ubuntu-latest
     steps:
-      - id: deployment
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
