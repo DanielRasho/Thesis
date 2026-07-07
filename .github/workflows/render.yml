@@ -2,7 +2,7 @@ name: Build and publish paper
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   workflow_dispatch:
 
 permissions:
@@ -23,7 +23,7 @@ jobs:
 
       - uses: typst-community/setup-typst@v5
 
-      - run: typst compile paper.typ paper.pdf
+      - run: typst compile main.typ paper.pdf
 
       - run: |
           mkdir public
