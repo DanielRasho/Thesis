@@ -114,7 +114,7 @@
 
 == Instrucciones
 
-Se te presentaran una serie de ejercicios para poner a prueba tu aprendizaje en Nixlang.
+Se te presentaran una serie de ejercicios para poner a prueba tu aprendizaje en Nixlang. Durante la prueba puedes consultar el contenido de aprendizaje dado por los investigadores, como buscar por internet, más no se permite el uso de asistentes de inteligencia artificial.
 
 
 *PA1-1*. Escoge el código correcto (Sin errores sintácticos).
@@ -964,6 +964,7 @@ in
 
 *PP8-1*. Indica cual será el resultado de la siguiente operación.
 
+#code_block(content: [
 ```nix
 let
   numbers = [ 1 2 3 ];
@@ -982,6 +983,7 @@ in
   b = builtins.listToAttrs labels;
 }
 ```
+])
 
 #choice_item(label: "a)", content: [
   ```nix
@@ -1079,8 +1081,254 @@ error: attribute 'value' missing
 ```
 ])
 
+== Respuestas Libres
+En esta sección trabajarás con un programa ya empaquetado en Nix. En cada ejercicio deberás modificar el código siguiendo las instrucciones.
 
-*PE9-1*.
+Se te proporcionará un entorno de desarrollo en línea (Codespaces) con todas las herramientas necesarias, por lo que no necesitas instalar nada en tu computadora.
 
-*PE10-1*.
+Para cada ejercicio:
 
+1. Lee la instrucción.
+2. Modifica el código proporcionado.
+3. Guarda los cambios y verifica que la solución funcione.
+4. Cuando estés conforme con tu respuesta, copia el código solicitado y pégalo en el cuestionario.
+
+*Los ejercicios son independientes entre sí. Si no logras resolver uno, puedes continuar con el siguiente*.
+\
+\
+\
+*PE9-1*. 
+Has empaquetado correctamente un script de terminal que consulta el clima. Actualmente el paquete solo está disponible para la plataforma `x86_64-linux`.
+
+Modifica el flake para que también soporte las siguientes plataformas:
+
+- `x86_64-linux`
+- `aarch64-linux`
+- `x86_64-darwin`
+- `aarch64-darwin`
+
+Evita duplicar código.
+
+*Pista*: Puedes definir primero una lista con las plataformas y luego usar `nixpkgs.lib.genAttrs` para generar automáticamente los atributos para cada una de ellas.
+
+#code_block(content: [
+```nix
+  {
+    description = "weathercli — reporte del clima en la terminal";
+
+    inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    outputs =
+      { self, nixpkgs }:
+      {
+        packages.x86_64-linux =
+          let
+            pkgs = nixpkgs.legacyPackages.x86_64-linux;
+
+            defaultConfig = pkgs.writeText "weathercli-config.json" (
+              builtins.toJSON {
+                city = "Tokyo";
+                units = "metric";
+                format = "compact";
+              }
+            );
+          in
+          {
+            default = pkgs.stdenv.mkDerivation {
+              pname = "weathercli";
+              version = "1.0.0";
+
+              src = ./.;
+
+              nativeBuildInputs = [ pkgs.makeWrapper ];
+
+              dontBuild = true;
+
+              installPhase = ''
+                mkdir -p $out/bin $out/share/weathercli
+                install -m755 weathercli.sh $out/bin/weathercli
+                install -m644 ${defaultConfig} $out/share/weathercli/config.json
+              '';
+
+              postFixup = ''
+                wrapProgram $out/bin/weathercli \
+                  --prefix PATH : ${
+                    pkgs.lib.makeBinPath [
+                      pkgs.curl
+                      pkgs.jq
+                    ]
+                  } \
+                  --set-default WEATHERCLI_CONFIG "$out/share/weathercli/config.json"
+              '';
+            };
+          };
+      };
+  }
+```
+])
+
+*PE10-1*. Tu script de clima utiliza un archivo de configuración llamado `weathercli-config.json` para indicar la ciudad a consultar. Sin embargo, el programa *también funciona si ese archivo no existe*.
+
+Actualmente ese archivo es generado automáticamente por Nix.
+
+*Modifica el código para que Nix deje de generar el archivo de configuración.*
+
+*Pista:* Busca la parte del código donde se crea o escribe el archivo `weathercli-config.json` y los lugares donde son usadas.
+
+#code_block(content: [
+```nix
+{
+  description = "weathercli — reporte del clima en la terminal";
+
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+  outputs =
+    { self, nixpkgs }:
+    let
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in
+    {
+      packages = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+
+          # Genera el archivo de configuración por defecto como JSON,
+          # a partir de un attribute set de Nix.
+          defaultConfig = pkgs.writeText "weathercli-config.json" (
+            builtins.toJSON {
+              city = "Roma";
+              units = "metric";
+              format = "compact";
+            }
+          );
+        in
+        {
+          default = pkgs.stdenv.mkDerivation {
+            pname = "weathercli";
+            version = "1.0.0";
+
+            src = ./.;
+
+            nativeBuildInputs = [ pkgs.makeWrapper ];
+
+            dontBuild = true;
+
+            installPhase = ''
+              mkdir -p $out/bin $out/share/weathercli
+              install -m755 weathercli.sh $out/bin/weathercli
+              install -m644 ${defaultConfig} $out/share/weathercli/config.json
+            '';
+
+            postFixup = ''
+              wrapProgram $out/bin/weathercli \
+                --prefix PATH : ${
+                  pkgs.lib.makeBinPath [
+                    pkgs.curl
+                    pkgs.jq
+                  ]
+                } \
+                --set-default WEATHERCLI_CONFIG "$out/share/weathercli/config.json"
+            '';
+
+            meta = {
+              description = "Reporte del clima en la terminal, configurable vía un archivo JSON";
+              mainProgram = "weathercli";
+              platforms = pkgs.lib.platforms.unix;
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+        }
+      );
+    };
+}
+```
+])
+
+*PE11-1*. Tu script de clima ya está correctamente empaquetado. Ahora quieres crear un entorno de desarrollo donde ese paquete esté disponible.
+
+Modifica el código para crear una devShell que incluya el paquete que definiste en el mismo flake.
+
+*Pista:* Puedes acceder a ese paquete mediante el atributo `self`, por ejemplo: `self.packages.<sistema>.<nombre-del-paquete>`.
+
+#code_block(content: [
+```nix
+{
+  description = "weathercli — reporte del clima en la terminal";
+
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+  outputs =
+    { self, nixpkgs }:
+    let
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in
+    {
+      packages = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+
+          # Genera el archivo de configuración por defecto como JSON,
+          # a partir de un attribute set de Nix.
+          defaultConfig = pkgs.writeText "weathercli-config.json" (
+            builtins.toJSON {
+              city = "Roma";
+              units = "metric";
+              format = "compact";
+            }
+          );
+        in
+        {
+          default = pkgs.stdenv.mkDerivation {
+            pname = "weathercli";
+            version = "1.0.0";
+
+            src = ./.;
+
+            nativeBuildInputs = [ pkgs.makeWrapper ];
+
+            dontBuild = true;
+
+            installPhase = ''
+              mkdir -p $out/bin $out/share/weathercli
+              install -m755 weathercli.sh $out/bin/weathercli
+              install -m644 ${defaultConfig} $out/share/weathercli/config.json
+            '';
+
+            postFixup = ''
+              wrapProgram $out/bin/weathercli \
+                --prefix PATH : ${
+                  pkgs.lib.makeBinPath [
+                    pkgs.curl
+                    pkgs.jq
+                  ]
+                } \
+                --set-default WEATHERCLI_CONFIG "$out/share/weathercli/config.json"
+            '';
+
+            meta = {
+              description = "Reporte del clima en la terminal, configurable vía un archivo JSON";
+              mainProgram = "weathercli";
+              platforms = pkgs.lib.platforms.unix;
+              license = pkgs.lib.licenses.mit;
+            };
+          };
+        }
+      );
+    };
+}
+```
+])

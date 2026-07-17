@@ -43,7 +43,7 @@
 }
 
 
-#align(center)[= Evaluación de Nix Lang]
+#align(center)[= Evaluación de NixLang]
 
 Gracias por tu tiempo. Con tu ayuda, nos gustaría examinar como usuarios perciben la usabilidad de _Nixlang_. Esto nos ayudara a encontrar areas de optimización de una manera que sea tan eficiente y comprensible como sea posible.
 

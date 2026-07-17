@@ -16,7 +16,7 @@
 
 // ---------- Encabezado ----------
 #align(center)[
-    #text(size: 10pt, weight: "bold")[Consentimiento Informado - Fase 1]
+    #text(size: 10pt, weight: "bold")[Consentimiento Informado - Fase 3]
 ]
 
 #v(0.5em)
@@ -28,7 +28,7 @@
   row-gutter: 0.6em,
   column-gutter: 0.6em,
   [*PROYECTO:*], [#campo[Nix para todos: Impacto del uso de un lenguaje de propósito general en la usabilidad de Nix]],
-  [*Investigador:*], [#campo[Daniel Alfredo Rayo Roldán - 22933]],
+  [*Investigador:*], [#campo[Daniel Alfredo Rayo Roldán - ray22933\@uvg.edu.gt]],
   [*Supervisor:*], [#campo[Gabriel Brolo Tobar - gbrolo\@uvg.edu.gt]],
 )
 
@@ -42,45 +42,38 @@ procedimientos y los posibles riesgos y beneficios de participar en este estudio
 cuidadosamente este documento antes de aceptar participar. Si tiene alguna pregunta, no
 dude en preguntar al investigador.
 
-// ---------- 2. Propósito del Estudio ----------
 == 2. Propósito del Estudio
 
 El propósito de este estudio es recopilar información sobre *la experiencia de uso en lenguajes de programación*.
 
 La información obtenida en este estudio se utilizará para *comprender las necesidades y puntos de mejorar que tienen los lenguajes de configuración para administración de paquetes de _software_*.
 
-// ---------- 3. Procedimientos del Estudio ----------
 == 3. Procedimientos del Estudio
 
 Si decide participar en este estudio, se le pedirá que *proporcione información sobre su experiencia general en desarrollo de software y administración de paquetes*.
 
-El procedimiento tomará aproximadamente *2 hora y 30 minutos* para completarse y hará preguntas sobre *sobre *.
+El procedimiento tomará aproximadamente *2 hora y 30 minutos* para completarse y hará preguntas sobre *sobre como aprendes lenguajes de programación*.
 
-La toma de muestra implicará *responder llenar una encuesta sobre tu conocimiento en manejo de paquetes de _software_ y un prueba de usabilidad en la herramienta Nix*.
+La toma de muestra implicará *llenar una cuestionario sobre tus opiniones en el en manejo de paquetes de _software_ y un prueba de usabilidad en la herramienta Nix donde se grabará tus interacciones en la pantalla de una computadora. Frases dichas por el usuario pueden ser citadas de forma textual, tras previa anomización*.
 
-// ---------- 4. Posibles Riesgos y Beneficios ----------
 == 4. Posibles Riesgos y Beneficios
 
-No se conocen riesgos asociados con la participación en este estudio. Sin embargo, puede
-experimentar cierta incomodidad o molestia al responder preguntas sobre temas sensibles o
-personales. Los posibles beneficios de participar en este estudio incluyen #campo[inserte los posibles beneficios del estudio].
+El estudio conlleva riesgos mínimos que constan de poder experimentar molestia o fatiga mental durante la realización de las actividades; en dado caso, el participante puede retirarse en cualquier momento sin consecuencia alguna. 
 
-// ---------- 5. Confidencialidad y Protección de Datos ----------
+No se espera que la participación en este estudio genere un beneficio personal directo para el participante. Sin embargo, *los resultados podrán contribuir a generar conocimiento sobre el desarrollo de lenguajes de programación y los métodos para evaluar su usabilidad.*
+
 == 5. Confidencialidad y Protección de Datos
 
-Toda la información recopilada durante este estudio se mantendrá confidencial y anónima.
-Los datos se almacenarán de forma segura y solo el investigador y el equipo de investigación
-tendrán acceso a ellos. No se utilizará información identificable en ninguna publicación o
-presentación que resulte del estudio.
+Toda la información recopilada durante este estudio será tratada de forma confidencial. Las respuestas de los cuestionarios serán almacenadas temporalmente en un servidor de Amazon Web Services (AWS) y posteriormente trasladadas a una *computadora protegida por contraseña, con acceso restringido al investigador Daniel Rayo*. Dado que el cuestionario no recopila información que permita identificar a los participantes, el almacenamiento temporal no representa un riesgo significativo para su privacidad. Una vez finalizada la recolección de datos, la información utilizada para el análisis y la presentación de resultados será anonimizada.
 
-// ---------- 6. Participación Voluntaria ----------
+Las grabaciones de las interacciones en pantalla serán gestionadas mediante la plataforma Microsoft Clarity, donde permanecerán durante un máximo de *cuatro semanas* después de finalizada la recolección de datos y serán eliminadas al concluir ese período. Las respuestas de los cuestionarios y las transcripciones anonimizadas se conservarán durante *16 semanas* en la computadora protegida por contraseña del investigador. La eliminación de todos los archivos será realizada por el investigador Daniel Rayo al finalizar los períodos de conservación correspondientes.
+
 == 6. Participación Voluntaria
 
 La participación en este estudio es voluntaria. Tiene el derecho de negarse a participar o de
 retirarse del estudio en cualquier momento sin penalización o pérdida de beneficios a los que
 tiene derecho de otra manera.
 
-// ---------- 7. Compensación ----------
 == 7. Compensación
 
 #v(0.3em)
@@ -91,9 +84,11 @@ Su participación en este estudio será compensada con un caramelo al terminar l
 // ---------- 8. Información de Contacto ----------
 == 8. Información de Contacto
 
-Si tiene alguna pregunta o inquietud sobre este estudio, comuníquese con el supervisor del
-proyecto en al *contacto ray22933\@uvg.edu.gt* . Si tiene alguna inquietud acerca de sus
-derechos como participante de investigación, comuníquese con *Carlos Gabriel Escobar Polanco* al correo cgescobarp\@uvg.edu.gt.
+Si tiene alguna pregunta o inquietud sobre este estudio, puedes comunicarse a los siguientes personas:
+
+- *Preguntas Relacionadas al Estudio:* Daniel Alfredo Rayo Roldán - ray22933\@uvg.edu.gt\
+- *Contacto del investigador principal:* Daniel Alfredo Rayo Roldán ray22933\@uvg.edu.gt\
+- *Preguntas sobre sus derechos como participantes:* Carlos Gabriel Escobar Polanco - cgescobarp\@uvg.edu.gt\
 
 // ---------- 9. Reconocimiento ----------
 == 9. Reconocimiento
