@@ -1,46 +1,38 @@
-// ============ SETUP
-#set document(
-    title: "Nix para todos: Impacto del uso de un lenguaje de propósito general en la usabilidad de Nix", 
-    author:"Daniel Alfredo Rayo Roldán",
-    keywords: ("Nix, Usability"),
-    date: auto)
+// ==============================================================================
+// Plantilla para Trabajos de Graduación IE-MT 2019v3 -- réplica en Typst
+// Traducido desde la plantilla LaTeX original (z-main.tex y archivos anexos)
+// Autor original de la plantilla: MSc. Miguel Zea
+// ==============================================================================
+// Este archivo único reúne el contenido que originalmente estaba repartido en
+// los archivos .tex (0-datos_estudiante, 1-opciones_adicionales, a-prefacio,
+// b-resumen, c-abstract, d-introduccion, ..., o-glosario). Cada sección se
+// marca con un comentario equivalente al nombre del archivo .tex original.
 
-#set text(lang: "es")
+// ------------------------------------------------------------------------------
+// 0-datos_estudiante.tex -- Datos del estudiante y del trabajo de graduación
+// ------------------------------------------------------------------------------
+#let nombreestudiante = "Daniel Alfredo Rayo Roldán"
+#let uvgcarne = "22933"
+#let uvgfacultad = "Ingeniería"
+#let uvgcarrera = "Ingeniería en Ciencias de la Computación y Tecnologías de la Información"
 
-#set page(
-  paper: "a4",
-  number-align: center,
-  numbering: none
-)
+#let titulotesis = "Nix para todos: Impacto del uso de un lenguaje de propósito general en la usabilidad de Nix"
+#let anoentrega = "2026"
+#let nombreasesor = "Ing. Gabriel Brolo Tobar"
 
-#set text(
-  size: 11pt,
-)
+#let nombreprimerex = "Dr. Gabriel Antonio Barrientos Rodriguez"
+#let nombresegundoex = "Ing. Luis Pedro Montenegro"
+#let anoaprobacion = "2026"
 
-#set par(
-  justify: true
-)
+#let imagenportada = "media/template/portadacit.jpg"
 
-#set heading(
-  numbering: "1.",
-)
-#show heading: set block(below: 1em)
+// ------------------------------------------------------------------------------
+// 1-opciones_adicionales.tex -- Capítulos incluidos (todas las secciones se
+// incluyen por defecto, igual que en la plantilla original)
+// ------------------------------------------------------------------------------
 
-
-#show heading.where(level: 4): it =>[
-    #block(it.body)
-]
-
-// ============ STYLES
-#show heading: it => if it.level == 1 [
-    #align(center)[
-        #it
-    ]
-    ] else [
-        #it
-    ]
-    
-// ============ FUNCTIONS
+// 
+// ============ METHODS
 
 #let cite-range(first, ..middle, last) = {
   cite(label(first))
@@ -50,41 +42,6 @@
   text("\u{2013}")
   cite(label(last))
 }
- 
-// ============ COVER
-
-#align(center)[
-  #text(size: 16pt)[#smallcaps()[Universidad del valle de guatemala\
-  Facultad de Ingeniería]]
-
-  #v(30pt)
-
-  #image("./media/UVG-Logo.jpg", width: 45%)
-
-  #v(30pt)
-
-  #title()
-
-  #v(50pt)
-
-  
-  Modalidad de trabajo profesional presentado por Daniel Alfredo Rayo Roldán para optar al grado 
-  académico en Ingeniería en Ciencias de la Computación y Tecnologías de la Información
-  
-]
-
-#pagebreak()
-// ============ CONTENT
-
-#outline(depth: 3)
-
-#set page(
-  paper: "a4",
-  number-align: center,
-  numbering: "1"
-)
-#counter(page).update(1)
-
 
 // ==============================
 // METHODS
@@ -150,17 +107,236 @@
   ]
 };
 
-// ==============================
-// ==============================
+// ------------------------------------------------------------------------------
+// Definiciones generales de la plantilla
+// ------------------------------------------------------------------------------
+#let uvg-green = rgb("#114734")
 
+#set document(title: titulotesis, author: nombreestudiante)
+#set page(paper: "us-letter", margin: (top: 1in, left: 1.5in, right: 1in, bottom: 1in))
+#set text(lang: "es", size: 11pt)
+#set par(justify: true, leading: 0.65em, spacing: 1.2em)
 
-= Resumen
+// Numeración de encabezados: capítulo.sección.subsección
+#set heading(numbering: "1.1")
+
+// Cuadros (tablas): en español "es" (no "es-MX") la plantilla original usa
+// "Cuadro" en vez de "Tabla" para los captions.
+#show figure.where(kind: table): set figure(supplement: "Cuadro")
+#show figure.where(kind: table): set figure.caption(position: top)
+
+// Estilo de encabezados de capítulo (equivalente a \usepackage[Sonny]{fncychap})
+#show heading.where(level: 1): it => {
+  pagebreak(weak: true)
+  v(1em)
+  if it.numbering != none {
+    block(text(size: 13pt, tracking: 2pt, fill: uvg-green)[
+      CAPÍTULO #counter(heading).display("1")
+    ])
+    v(0.3em)
+  }
+  text(size: 20pt, weight: "bold")[#it.body]
+  v(0.3em)
+  line(length: 100%, stroke: 0.6pt + uvg-green)
+  v(1em)
+}
+#show heading.where(level: 2): it => {
+  v(0.8em)
+  text(size: 14pt, weight: "bold")[#it.body]
+  v(0.4em)
+}
+#show heading.where(level: 3): it => {
+  v(0.6em)
+  text(size: 12pt, weight: "bold", style: "italic")[#it.body]
+  v(0.3em)
+}
+
+// Formato de párrafo por defecto (\defaultparformat en la plantilla original:
+// espaciado entre párrafos en vez de sangría)
+#set par(first-line-indent: 0pt)
+
+// Salto de página en blanco (equivalente a \blankpage), no se usa en la
+// versión digital pero se deja disponible.
+#let blankpage() = {
+  pagebreak()
+  [ ]
+  pagebreak()
+}
+
+// Glosario manual (Typst no trae un paquete de glosarios como
+// \usepackage{glossaries}; se simula con un diccionario + funciones gls/Gls).
+#let glossary = (
+  latex: (name: "latex", desc: "Es un lenguaje de marcado adecuado especialmente para la creación de documentos científicos"),
+  formula: (name: "fórmula", desc: "Una expresión matemática"),
+)
+#let gls(key) = glossary.at(key).name
+#let Gls(key) = {
+  let n = glossary.at(key).name
+  upper(n.slice(0, 1)) + n.slice(1)
+}
+
+// ==============================================================================
+// PORTADA
+// ==============================================================================
+#page(
+  fill: uvg-green,
+  margin: (left: 3cm, right: 3cm, top: 1in, bottom: 0in),
+  numbering: none,
+)[
+  #set text(fill: white)
+  #line(length: 100%, stroke: 0.6pt + white)
+  #v(0.1in)
+  #text(size: 26pt, weight: "bold")[#titulotesis]
+  #v(0.3em)
+  #line(length: 100%, stroke: 0.6pt + white)
+  #v(0.3em)
+  #text(size: 18pt)[#nombreestudiante]
+
+  #v(1fr)
+  #box(width: 100%, height: 13.25cm)[
+    #box(width: 100%, height: 100%, clip: true)[
+      #image(imagenportada, height: 13.25cm, width: 100%, fit: "cover")
+    ]
+    // Logo institucional con fondo (fondologo_grande.png), esquina inferior derecha
+    #place(bottom + right, dx: -1cm, dy: -0.2cm)[
+      #image("media/template/fondologo_grande.png", height: 1.15in)
+    ]
+    // TODO: logoUVGblanco.eps -- Typst no soporta el formato EPS de forma
+    // nativa. Convierta el archivo a PNG o SVG (por ejemplo con
+    // `inkscape plantilla/logoUVGblanco.eps --export-type=svg` o
+    // `pdftocairo`/`magick`) y luego descomente e inserte:
+    #place(bottom + right, dx: -1.6cm, dy: -0.8cm)[
+      #image("media/template/logoUVGblanco.svg", height: 0.55in)
+    ]
+  ]
+]
+
+// ==============================================================================
+// CARÁTULA
+// ==============================================================================
+#page(numbering: none)[
+  #align(center)[
+    #text(size: 18pt)[UNIVERSIDAD DEL VALLE DE GUATEMALA] \
+    #text(size: 18pt)[Facultad de #uvgfacultad]
+  ]
+  #v(0.75cm)
+
+  #align(center)[
+    // TODO: escudoUVGnegro.eps -- Typst no soporta EPS de forma nativa.
+    // Convierta el archivo a PNG o SVG y descomente la siguiente línea:
+    #image("media/template/escudoUVGnegro.svg", height: 5.5cm)
+    #v(5.5cm)
+  ]
+  #v(0.5in)
+
+  #align(center)[
+    #text(size: 15pt, weight: "bold")[#titulotesis]
+    #v(1fr)
+    #text(size: 13pt)[
+      Modalidad de trabajo profesional presentado por #nombreestudiante para optar al
+      grado académico de Licenciado en #uvgcarrera
+    ]
+    #v(1fr)
+    #text(size: 12pt)[Guatemala,]
+    #v(1em)
+    #text(size: 12pt)[#anoentrega]
+  ]
+]
+
+// ==============================================================================
+// HOJA DE FIRMAS
+// ==============================================================================
+#page(numbering: none)[
+  #v(0.5in)
+  #text(size: 13pt)[Vo.Bo.:]
+  #v(1cm)
+  #align(center)[
+    #line(length: 4in, stroke: 0.5pt)
+    #nombreasesor
+  ]
+  #v(1in)
+
+  #text(size: 13pt)[Tribunal Examinador:]
+  #v(1cm)
+  #align(center)[
+    #line(length: 4in, stroke: 0.5pt)
+    #nombreasesor
+    #v(1in)
+    #line(length: 4in, stroke: 0.5pt)
+    #nombreprimerex
+    #v(1in)
+    #line(length: 4in, stroke: 0.5pt)
+    #nombresegundoex
+  ]
+  #v(1in)
+
+  Fecha de aprobación: Guatemala, #box(width: 0.5in, line(length: 100%, stroke: 0.5pt))
+  de #box(width: 1in, line(length: 100%, stroke: 0.5pt)) de #anoaprobacion.
+]
+
+// ==============================================================================
+// CONTENIDO DEL TRABAJO -- numeración romana para las primeras páginas
+// ==============================================================================
+#set page(numbering: "i")
+#counter(page).update(1)
+
+// ------------------------------------------------------------------------------
+// a-prefacio.tex -- AGRADECIMIENTOS
+// ------------------------------------------------------------------------------
+#heading(level: 1, numbering: none, outlined: true)[Reconocimientos]
+
+Pendientes
+
+// ------------------------------------------------------------------------------
+// b-resumen.tex -- RESUMEN
+// ------------------------------------------------------------------------------
+#heading(level: 1, numbering: none, outlined: true)[Resumen]
+
 El problema de llevar _software_ de una computadora a otra y que siga funcionando (proceso conocido como Despliegue de _Software_) es un yugo con el que las Ciencias de Computación no han dado una solución definitiva, esencialmente porque para que una pieza de _software_ funcione correctamente no solamente depende del código fuente en el que esta escrita, sino del contexto que le rodea (_hardware_, sistema operativo, dependencias, etc.), bajo ese contexto surgen Nix como un manejador de paquetes y sistema de construcción #footnote[Sistemas que automatizan la ejecución de tareas repetitivas, usualmente para crear artefactos de _software_ que pueden ser desplegados] que utiliza un enfoque inspirado en la pureza funcional, donde cada paquete define explícitamente el contexto en el que espera ser construido y ejecutado. Este enfoque a demostrado poder crear más de 700 mil artefactos binariamente idénticos en diferentes computadoras y contar con unos de los repositorio de paquetes más grande a fecha de este documento. La idea evolucionó al punto de definir el estado casi completo de un sistema operativo mediante un solo archivo de configuración.
 
 Sin embargo, a pesar de sus capacidades prometedoras, Nix no ha gozado de la misma adopción que otras herramientas que abordan los mismos problemas de reproducibilidad como Docker, Conda o VirtualEnv u otros manejadores de paquetes. Las causas de acuerdo a la comunidad son varias: Documentación compleja, errores crípticos, o un lenguaje de programación difícil de dominar; muchos de ellos no siendo problemas técnicos sino de experiencia de uso, y que cae en el rango de estudio del "DX" (Experiencia de Desarrollo por sus siglas en inglés). Este trabajó se enfoca en verificar si proveer una nueva forma de interactuar con Nix a través de un lenguaje de propósito general como Typescript, puede reducir la barrera de entrada para nuevos usuarios y por ende mejorar su DX.
 
-#pagebreak()
+// ------------------------------------------------------------------------------
+// c-abstract.tex -- ABSTRACT
+// ------------------------------------------------------------------------------
+#heading(level: 1, numbering: none, outlined: true)[Abstract]
 
+The problem of moving software from one computer to another and having it keep working (a process known as Software Deployment) is a burden that Computer Science has not yet found a definitive solution to, essentially because for a piece of software to work correctly it depends not only on the source code in which it is written, but also on the surrounding context (hardware, operating system, dependencies, etc.). It is in this context that Nix emerges as a package manager and build system #footnote[Systems that automate the execution of repetitive tasks, usually to create software artifacts that can be deployed.] that uses an approach inspired by functional purity, where each package explicitly defines the context in which it expects to be built and run. This approach has demonstrated the ability to create more than 700,000 binarily identical artifacts on different computers and boasts one of the largest package repositories as of the writing of this document. The idea evolved to the point of being able to define the nearly complete state of an operating system through a single configuration file.
+
+However, despite its promising capabilities, Nix has not enjoyed the same adoption as other tools that address the same reproducibility problems, such as Docker, Conda, VirtualEnv, or other package managers. According to the community, the causes are several: complex documentation, cryptic errors, or a programming language that is difficult to master; many of these are not technical problems but rather user-experience ones, falling within the scope of "DX" (Developer Experience) studies. This work focuses on verifying whether providing a new way of interacting with Nix through a general-purpose language such as TypeScript can lower the barrier to entry for new users and thereby improve its DX.
+
+// ------------------------------------------------------------------------------
+// ÍNDICE GENERAL
+// ------------------------------------------------------------------------------
+#pagebreak()
+#heading(level: 1, numbering: none, outlined: true)[Índice]
+#outline(title: none, indent: auto)
+
+// ------------------------------------------------------------------------------
+// LISTADO DE FIGURAS
+// ------------------------------------------------------------------------------
+#pagebreak()
+#heading(level: 1, numbering: none, outlined: true)[Lista de figuras]
+#outline(title: none, target: figure.where(kind: image))
+
+// ------------------------------------------------------------------------------
+// LISTADO DE CUADROS
+// ------------------------------------------------------------------------------
+#pagebreak()
+#heading(level: 1, numbering: none, outlined: true)[Lista de cuadros]
+#outline(title: none, target: figure.where(kind: table))
+
+
+// ==============================================================================
+// A partir de aquí inicia la numeración arábiga y el conteo de capítulos
+// ==============================================================================
+#set page(numbering: "1")
+#counter(page).update(1)
+#counter(heading).update(0)
+
+// ------------------------------------------------------------------------------
+// d-introduccion.tex -- INTRODUCCIÓN
+// ------------------------------------------------------------------------------
 = Introducción
 
 El distribuir _software_ de las cocinas de los ingenieros a las mesas de los usuarios finales no ha sido una tarea sencilla  @mantylaSoftwareDeploymentActivities2011, los artefactos de _software_ se comportan igual a las plantas exóticas cuando son trasplantadas a un hábitat diferente al que están acostumbradas: se marchitan @Dolstra2006. Como las plantas, el _software_ "crece y evoluciona" en el _hardware_, sistema operativo y librerías específicas, de la computadora del ingeniero, pero en el momento que esos artefactos son llevados a los ecosistemas extraños, que son los dispositivos de los usuarios finales, el que funcione o no se vuelve una apuesta ante la que no se tiene control... o si? @Dolstra2006.
@@ -185,20 +361,9 @@ A pesar de ello , Nix ha gozado de una adopción bastante reducida en comparaci�
 
 El concepto que los desarrolladores también son usuarios dio origen al campo de estudio de Experiencia de Desarrollo (o DX por sus siglas en inglés), donde el estudio sobre como los desarrolladores perciben sus herramientas ha sido un tema frecuente @Razzaq2024 sobre el que ya se han desarrollado algunos instrumentos como DEXI para evaluar dichas dimensiones@Kuusinen2016. Y dado el trayecto de intentos por mejorar la DX en Nix #cite-range("caddetNixNickel", "gagarinFourMonthsNix", "hufschmittCurrentStatePtyx", "fricklerhandwerk2022") el presente trabajo, busca ser una aplicación de las técnicas aprendidas en el campo de DX, en conjunto con el diseño de lenguajes, para evaluar si un Lenguaje de Propósito Específico Embebido (eDSL por sus siglas en inglés) en Typescript @Typescript podría ayudar a reducir la barra de entrada para nuevos desarrolladores en la herramienta.
 
-#pagebreak()
-
-= Objetivos
-
-== General
-Evaluar si un eDSL en TypeScript reduce la barrera de entrada a Nix —referente funcional y declarativo en gestión de paquetes, limitado por su curva de aprendizaje— frente a Nixlang, mediante tiempo de completación de tareas y experiencia de usuario.
-
-== Específicos
-1. Identificar los principales puntos de dolor cognitivos que presenta el lenguaje de Nix, para fundamentar el diseño de un eDSL, mediante sesiones de pensar-en-alto y "Programación Natural" con estudiantes de Ciencias de la Computación que no hayan utilizado Nix previamente.
-2. Desarrollar un eDSL en TypeScript que sirva de prototipo funcional para la evaluación comparativa, capaz de generar archivos de configuración en Nixlang, cubriendo al menos las funcionalidades de la librería estándar, verificado con una batería de pruebas.
-3. Comparar Nixlang frente al eDSL desarrollado, para determinar si la familiaridad con Typescript reduce la carga cognitiva de adopción mediante un cuestionario estructurado, y el uso de Short AttrakDiff 2 y DEXI aplicados a estudiantes de Ciencias de la Computación sin experiencia previa, con análisis de diferencia estadística.
-
-#pagebreak()
-
+// ------------------------------------------------------------------------------
+// f-justificacion.tex -- JUSTIFICACIÓN
+// ------------------------------------------------------------------------------
 = Justificación
 
 Con el crecimiento del mercado de los servicios de infraestructura como código @grandviewresearchInfrastructureCodeMarket, se ha aprendido que el poder definir el estado de sistemas completos a través de código, trae ventajas importantes en velocidad de desarrollo, escalabilidad y costos @pandyaIntroductionInfrastructureCode2022. La misma idea también se ha aplicado a entornos de desarrollo @ghanbariUsingDevelopmentEnvironment2026 o flujos de despliegue continuo @wesselGitHubActionsImpact2023; todo lo anterior sugiere que herramientas que permiten definir entidades o procesos de forma declarativa pueden facilitar el ciclo de desarrollo de _software_. En el manejo de paquetes, el panorama es fragmentado: habiendo alternativas por lenguaje, o indirectas como Docker @Zwinger2026; y una solución declarativa de propósito general no es de el todo clara. Nix lleva años intentando llenar ese espacio — y las cifras sugieren que esta haciendo algo bien: al tener uno de los repositorios de paquetes más grandes de Linux, con 115 mil paquetes @marakasovRepositoryStatistics un crecimiento del 264% en número de mantenedores en los últimos seis años @gg-solutionsLinuxSilentTech2026.
@@ -215,7 +380,25 @@ El uso de lenguajes de propósito general para expresar dominios específicos �
 
 En este contexto, persiste la ausencia de una propuesta que combine un eDSL basado en un lenguaje ampliamente adoptado, con cobertura funcional mas amplia de Nixlang y validación empírica de mejoras en la experiencia de desarrollo.
 
-#pagebreak()
+// ------------------------------------------------------------------------------
+// g-objetivos.tex -- OBJETIVOS
+// ------------------------------------------------------------------------------
+= Objetivos
+
+== Objetivo general
+Evaluar si un eDSL en TypeScript reduce la barrera de entrada a Nix —referente funcional y declarativo en gestión de paquetes, limitado por su curva de aprendizaje— frente a Nixlang, mediante tiempo de completación de tareas y experiencia de usuario.
+
+== Objetivos específicos
+1. Identificar los principales puntos de dolor cognitivos que presenta el lenguaje de Nix, para fundamentar el diseño de un eDSL, mediante sesiones de pensar-en-alto y "Programación Natural" con estudiantes de Ciencias de la Computación que no hayan utilizado Nix previamente.
+2. Desarrollar un eDSL en TypeScript que sirva de prototipo funcional para la evaluación comparativa, capaz de generar archivos de configuración en Nixlang, cubriendo al menos las funcionalidades de la librería estándar, verificado con una batería de pruebas.
+3. Comparar Nixlang frente al eDSL desarrollado, para determinar si la familiaridad con Typescript reduce la carga cognitiva de adopción mediante un cuestionario estructurado, y el uso de Short AttrakDiff 2 y DEXI aplicados a estudiantes de Ciencias de la Computación sin experiencia previa, con análisis de diferencia estadística.
+
+// ------------------------------------------------------------------------------
+// i-marco_teorico.tex -- MARCO TEÓRICO
+// ------------------------------------------------------------------------------
+= Marco teórico
+
+Testing
 
 = Metodología
 
@@ -392,142 +575,28 @@ analizan mediante la prueba no paramétrica de Mann-Whitney, apropiada dado el
 tamaño reducido de la muestra.
 #pagebreak()
 
-= Plan de Trabajo
+// ------------------------------------------------------------------------------
+// k-conclusiones.tex -- CONCLUSIONES (sin contenido en el original)
+// ------------------------------------------------------------------------------
+= Conclusiones
 
-Para poder llevar a cabo la investigación las diferentes fases fueron divididas en tareas más pequeñas y se calendarizaron luego en el siguiente cronograma.
+// ------------------------------------------------------------------------------
+// l-recomendaciones.tex -- RECOMENDACIONES (sin contenido en el original)
+// ------------------------------------------------------------------------------
+= Recomendaciones
 
-#let phases = (
-  (
-    label: "Fase 1 · Investigación preliminar",
-    color: rgb("#CEDFFF"),
-      text-color: rgb("#000"),
-    bar-color: rgb("#5484DF"),
-    tasks: (
-      ("Diseño de instrumentos",          (1, 2)),
-      ("Reclutamiento participantes",      (3, 3)),
-      ("Sesiones pensar-en-alto y programacion natural",          (4, 4)),
-      ("Análisis cualitativo de las sesiones",          (5, 5)),
-    ),
-  ),
-  (
-    label: "Fase 2 · Desarrollo eDSL",
-    color: rgb("#C8EEC6"),
-    text-color: rgb("#000"),
-    bar-color: rgb("#42B33C"),
-    tasks: (
-      ("Diseño arquitectura eDSL",         (6, 7)),
-      ("Implementación core eDSL",         (8, 10)),
-      ("Cobertura stdlib Nix",             (10, 12)),
-      ("Pruebas y validación",             (12, 13)),
-    ),
-  ),
-  (
-    label: "Fase 3 · Evaluación comparativa",
-    color: rgb("#FAECE7"),
-    text-color: rgb("#000"),
-    bar-color: rgb("#D85A30"),
-    tasks: (
-      ("Diseño cuestionarios cognitivos",  (14, 14)),
-      ("Reclutamiento participantes",      (14, 14)),
-      ("Sesiones evaluación cognitiva",    (15, 15)),
-      ("Sesiones AttrakDiff / DEXI / OUX", (15, 15)),
-      ("Análisis estadístico",             (16, 17)),
-      ("Síntesis de resultados",           (17, 18)),
-    ),
-  ),
-)
+// ------------------------------------------------------------------------------
+// m-bibliografia.bib -- BIBLIOGRAFÍA (estilo IEEE, igual que el original)
+// ------------------------------------------------------------------------------
+#heading(level: 1, numbering: none, outlined: true)[Bibliografía]
+#bibliography("ref.bib", title: none, style: "ieee")
 
-#let total-weeks = 18
-#let cell-width = 1.6em
-
-#let gantt-row(task-name, span, bar-color) = {
-  let (start, end) = span
-  (
-    table.cell(align: left + horizon)[#text(size: 8pt)[#task-name]],
-    ..range(1, total-weeks + 1).map(w => {
-      if w >= start and w <= end {
-        table.cell(fill: bar-color)[]
-      } else {
-        table.cell()[]
-      }
-    })
-  )
-}
-
-#figure(
-table(
-  columns: (10em, ..range(total-weeks).map(_ => cell-width)),
-  rows: auto,
-  stroke: (x, y) => (
-    left: if x == 0 { 0.5pt + gray } else { none },
-    right: if x == total-weeks { 0.5pt + gray } else { none },
-    top: 0.4pt + luma(220),
-    bottom: 0.4pt + luma(220),
-  ),
-  inset: (x: 3pt, y: 4pt),
-
-  // Header row
-  table.cell(align: left + horizon)[#text(weight: "bold", size: 8pt)[Tarea/ Semanas]],
-  ..range(1, total-weeks + 1).map(w =>
-    table.cell(align: center + horizon)[#text(size: 7pt, weight: "bold")[#w]]
-  ),
-
-  // Phases and tasks
-  ..phases.map(phase => (
-    table.cell(
-      colspan: total-weeks + 1,
-      fill: phase.color,
-      align: left + horizon,
-    )[#text(weight: "bold", size: 8pt, fill: phase.text-color)[#phase.label]],
-    ..phase.tasks.map(task => {
-      let (name, span) = task
-      gantt-row(name, span, phase.bar-color)
-    }).join()
-  )).join()
-), caption: [Diagrama de Gannt de la ejecución de tareas a lo largo del tiempo])
-
-#pagebreak()
-
-= Índice preliminar
-
-1. Dedicatorio
-2. Resumen/Abstract
-3. Tabla de Contenido
-4. Introducción
-5. Objetivos
-6. Marco Teórico\
-    6.1. Despliegue de *software* y sus problemas\
-    6.2. Nix como una solución\
-    6.3. Experiencia de Desarrollo\
-    6.4. Intentos para mejorar Nix\
-    6.5. Transpiladores\
-7. Metodología\
-   7.1. Fase 1: Investigación preliminar\
-   7.2. Fase 2: Desarrollo del eDSL\
-   7.2.1. Arquitectura\
-   7.3. Fase 3: Evaluación comparativa\
-   7.3.1. Cuestionario estructurado\
-   7.3.2. AttrakDiff-2\
-   7.3.3. DEXI\
-8. Resultados
-9. Discusión
-10. Referencias
-11. Anexos
-
-#pagebreak()
-
-#bibliography(
-  title: "Referencias", 
-  ("ref.yml", "ref.bib"), 
-  style: "ieee",
-  full: false)
-#pagebreak()
-
+// ------------------------------------------------------------------------------
+// n-anexos.tex -- ANEXOS
+// ------------------------------------------------------------------------------
 = Anexos
 
 == Soluciones existentes a Nixlang <Appendix1>
-
-
 
 #figure(
   table(
@@ -2062,3 +2131,17 @@ No te detengas demasiado en las combinaciones de palabras y realiza tu evaluaci�
 )
 
 *¿Algún comentario adicional que quieras destacar sobre tu experiencia usando eDSL? (Opcional)*
+
+// ------------------------------------------------------------------------------
+// o-glosario.tex -- GLOSARIO
+// ------------------------------------------------------------------------------
+#pagebreak(weak: true)
+#heading(level: 1, numbering: none, outlined: true)[Glosario]
+
+// Typst no incluye un paquete de glosarios equivalente a \usepackage{glossaries};
+// esta sección lista manualmente las entradas definidas en el diccionario
+// `glossary` de arriba, ordenadas alfabéticamente por término.
+#for key in glossary.keys().sorted(key: k => glossary.at(k).name) [
+  #strong[#glossary.at(key).name] #h(0.5em) --- #glossary.at(key).desc
+  #v(0.5em)
+]
