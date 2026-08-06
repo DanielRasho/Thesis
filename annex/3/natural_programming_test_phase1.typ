@@ -60,7 +60,7 @@ Un paquete de _software_ es un conjunto de programas, archivos e instrucciones p
 
 Un manejador de paquetes es el programa encargado de instalar, actualizar, configurar y eliminar paquetes en un sistema. Una de sus responsabilidades más importantes es gestionar las dependencias: un paquete raramente funciona solo — casi siempre requiere que otros paquetes estén instalados previamente y configurados de una manera específica, generando una grafo de paquetes de dependencias como en la  @diagram1.
 
-#figure(image("../media/Diagram1.svg", width: 60%), caption: [Dependencias ficticias de `VS Code` y `Discord`; ambos tienen una dependencia compartida en `Electron`, a su vez estas dependencias dependen de otras.])<diagram1>
+#figure(image("./diagram1.svg", width: 60%), caption: [Dependencias ficticias de `VS Code` y `Discord`; ambos tienen una dependencia compartida en `Electron`, a su vez estas dependencias dependen de otras.])<diagram1>
 
 *El manejador de paquetes que tú vas a crear funciona de manera diferente a los tradicionales*. En lugar de ejecutar un comando como `instalar paquete-X`, *tú describes lo que quieres en un archivo de configuración*, y el manejador de paquetes se encarga de llevarlo a cabo. Esto significa que toda la información sobre qué instalar, cómo construirlo y de qué depende queda registrada explícitamente en ese archivo.
 
@@ -75,7 +75,7 @@ Para describir un paquete en este sistema, necesitas especificar al menos:
 Puedes imaginar cada paquete como una receta de cocina: tiene ingredientes (dependencias) que obtienes de algúna tienda (fuentes), se prepara en una cocina específica (arquitectura), y sigue una serie de pasos (instrucciones de instalación) que van desde preparar los ingredientes hasta tener el plato listo para servir.
 
 
-#figure(image("../media/diagram2.png", width: 80%), caption: [Los diferentes componentes a tomar en cuanta para describir un paquete de _software_])<diagram2>
+#figure(image("./diagram2.png", width: 80%), caption: [Los diferentes componentes a tomar en cuanta para describir un paquete de _software_])<diagram2>
 
 #pagebreak()
 
@@ -158,4 +158,3 @@ Construir un paquete ocurre en fases, por ahora trabaja con dos:
 6. Como generalizarías tus ideas anteriores para que pudieras definir varios paquetes en un archivo sin tener que repetir tanto código.
 
 #answer-box(height: 5cm)
-
