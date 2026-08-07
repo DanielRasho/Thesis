@@ -43,7 +43,10 @@ caption: [Índice de interés de búsqueda de Neovim en Google entre 2014 y 2026
 )
 
 == Número de dependencias de Firefox <Appendix5>
-Con datos extraidos de Github del repositorio de `mozilla-firefox/firefox` para el commit `ac91bfcce1bf3240e2dce40f47c372e76bc4f26c` se descargaron las dependencias detectadas por Github en formato SBOM en la sección de "Grafo de Dependencias", revelando una total de 22,732 dependencias. Los datos utilizados se encuentran en.
+Con datos extraidos de Github del repositorio de `mozilla-firefox/firefox` para el commit `ac91bfcce1bf3240e2dce40f47c372e76bc4f26c` se descargaron las dependencias detectadas por Github en formato SBOM (estándar SPDX 2.3) en la sección de "Grafo de Dependencias", revelando una total de 22,732 dependencias. Los datos utilizados se encuentran en `2/mozilla-firefox_dependencies.json`.
+
+Del archivo SBOM se extrajeron 21,295 paquetes y 37,926 relaciones de dependencia directa (`DEPENDS_ON`)#footnote[La diferencia con las 22,732 dependencias reportadas por la interfaz de Github se debe a que, según indica el propio archivo, la versión exacta de algunos paquetes no pudo ser resuelta.], que se usaron para construir un grafo de dependencias. Los dependencias son mostradas en la @figure3.
+
 
 == Cuestionarios Fase 1 <Appenddix3>
 

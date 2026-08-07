@@ -339,22 +339,56 @@ Evaluar si un eDSL en TypeScript reduce la barrera de entrada a Nix —referente
 // ------------------------------------------------------------------------------
 = Marco teórico
 
-- Origenes despliegue de software
-- Tipos de dependencias
-- Tipos de dependencias
-- Problemas enfrentados
-- Soluciones existentes
+Las siguientes secciones presentarán el panorama actual sobre el despliegue y manejo de paquetes de _software_, los problemas de los modelos existentes y la forma en que Nix resuelve algunos de ellos. Posteriormente se discutirán los problemas de usabilidad en Nix y los intentos previos por resolverlos; nos enfocaremos en su lenguaje _Nixlang_, explicando su naturaleza y cómo se diferencia de otros lenguajes. Se concluirá con un resumen de la literatura sobre estudios de usabilidad en lenguajes de programación.
 
 == Despliegue de software
 
-#quote[Uno de de los principios fundamentales de la ingeniería de _sofware_ es promover la reutilización sobre la reimplementación de soluciones existentes.] @jaimeAnalysisEvolutionDependencies, se pueden encontrar indicios de esto en los primeros programas aritméticos en 1947 @goldstainPlanningCodingProblems1947, Y hoy en día a evolucionado a que varias de las herramientas usadas por desarrolladores de sofware dependan en mayor o medida de otros piezas de código desarrollados por terceros como React, Vuejs or Scikit-Learn @jaimeAnalysisEvolutionDependencies. 
+La mayoría de los programas se desarrollan pensando en que serán ejecutados en sistemas distintos al que los vio nacer. El conjunto de actividades orientadas a llevar un artefacto de _software_ desde el entorno de desarrollo hasta las computadoras del usuario final, y a garantizar su correcto funcionamiento a lo largo de todo su ciclo de vida —instalación, actualización, configuración y eventual desinstalación—, constituye el campo de interés del despliegue de _software_ @mantylaSoftwareDeploymentActivities2011 @Dolstra2006. Contrario a la percepción común de que desplegar un programa se reduce a "copiar archivos", Mäntylä y Vanhanen @mantylaSoftwareDeploymentActivities2011 documentan, a partir de un estudio de caso en cuatro empresas, que se trata de un proceso multifacético que involucra la interacción con el cliente, la integración con sistemas externos y la configuración del entorno de ejecución; complejidad que se acentúa cuando el producto depende de un modelo de datos particular o de una integración estrecha con otros sistemas.
 
-Estas piezas de código reutilizable reciben el nombre de librerías, dependencias o paquetes @mensSoftwareEcosystemsTooling2023, y son un método eficaz para disminuir el tiempo de desarrollo y permitir a los desarrolladores a enfocarse en el producto final @societyGuideSoftwareEngineering2026. Programas como Mozilla Firefox, depende de más de 2,000 paquetes @Appendix5; cantidad que se podría volverse complicada de mantener manualmente.
+Esta noción amplia de despliegue está estrechamente vinculada con el campo del Manejo de Configuración de _Software_ (SCM, por sus siglas en inglés), disciplina orientada a preservar la integridad de un producto a lo largo de su evolución mediante la identificación, el control y la auditoría de los cambios realizados sobre sus componentes @bersoffSoftwareConfigurationManagement1978. Dolstra @Dolstra2006 formaliza la relación entre ambos campos al señalar que la ejecución correcta de un artefacto de _software_ no depende únicamente de su código fuente, sino del contexto que lo rodea —_hardware_, sistema operativo, bibliotecas y demás dependencias—; desplegar un programa consiste, entonces, en reconstruir fielmente dicho contexto en cada entorno de destino.
 
-=== Tipos de librerías
+Para lidiar con esta dependencia del contexto han surgido distintas familias de herramientas, cada una centrada en una faceta particular del problema: los manejadores de paquetes, que automatizan la instalación y resolución de dependencias dentro de un entorno compartido; las herramientas de virtualización y contenedores, que empaquetan la aplicación junto con su entorno de ejecución para aislarla del resto del sistema @Sobieraj2024 @Lingayat2018; los sistemas de construcción (_build systems_), que transforman el código fuente en artefactos ejecutables de forma reproducible; y las herramientas de gestión de configuración, orientadas al aprovisionamiento y mantenimiento de servidores completos @Zwinger2026. Estas categorías no son mutuamente excluyentes, sino solo interactuan en diferentes fases con las mismas unidades de contenido: el paquete de _software_.
 
-=== Manejo de Librerías en Linux
+== Paquetes de _software_
 
+#quote[Uno de los principios fundamentales de la ingeniería de _software_ es promover la reutilización sobre la reimplementación de soluciones existentes.] @jaimeAnalysisEvolutionDependencies Pueden encontrarse indicios de esta práctica desde los primeros programas aritméticos de 1947 @goldstainPlanningCodingProblems1947, y hoy en día ha evolucionado hasta el punto en que buena parte de las herramientas usadas por desarrolladores de _software_ dependen, en mayor o menor medida, de piezas de código desarrolladas por terceros, como React, Vue.js o Scikit-learn @jaimeAnalysisEvolutionDependencies.
+
+A este conjunto de código fuente, binarios y otros archivos reutilizables se le conoce como librerías, dependencias o paquetes @mensSoftwareEcosystemsTooling2023, y constituyen un método eficaz para reducir el tiempo de desarrollo y permitir a los desarrolladores enfocarse en el producto final. Además, se percibe que el código de los paquetes es de mejor calidad, probablemente porque gran parte de ellos es de código abierto, es decir, revisado y modificado por múltiples desarrolladores @societyGuideSoftwareEngineering2026.
+
+El uso de código de terceros se ha convertido en una práctica extendida: en 2026, la compañía Black Duck @blackduck2026OSSRAReport —que ofrece herramientas para evaluar la seguridad de paquetes de código abierto en proyectos de _software_— realizó un estudio sobre 2,843 proyectos de distintas industrias, en el que encontró que el 98% de ellos utilizaba paquetes de código abierto, con un promedio de 1,180 paquetes por proyecto; ambas cifras superiores a las reportadas en un estudio previo de 2025. Este crecimiento no se limita al uso de bibliotecas, sino también a su cantidad dentro de cada proyecto: un ejemplo es el navegador Mozilla Firefox, cuyo árbol de dependencias supera los 2,000 paquetes (@Appendix5), complejidad que se ilustra en la @figure3 y cuyo mantenimiento manual no resultaría divertido para ningún desarrollador.
+
+#figure(
+  image("./media/figures/Figure3.png", width: 85%),
+  caption: [Grafo completo de dependencias de Firefox (21,295 paquetes, 37,926 relaciones `DEPENDS_ON`). Cada punto representa un paquete coloreado por ecosistema: `npm` en azul, `cargo` en naranja, `pypi` en verde y otros en gris; el punto negro central es el propio repositorio de Firefox.]
+)<figure3>
+
+La @figure3 revela *una característica esencial de los paquetes, y es que estos a su vez pueden depender de otros paquetes*; formando una _grafo de dependencias de softaware_, de paquetes conectados por vértices dirigidos que simbolizan relaciones `'dependen de'` @kikasStructureEvolutionPackage2017. Es esta estructura de datos la que muchos manejadores de paquetes utilizan para saber que instalar y en que orden @Gibb2026 y que se discutirá en la @manejadores_de_paquetes. Esta estructura a su vez nos puede ayudar a clasificar los diferentes tipos de paquetes.
+
+=== Clasificacion de paquetes
+Los paquetes se pueden clasificar en base a su relación con el paquete principal (la aplicación que el usuario desea usar) @Gibb2026:
+
+- *Directas*: Paquetes que el paquete principal declara explícitamente que necesita.
+- *Indirectas*: Paquetes que son dependencias de paquetes que no son el principal.
+- *Opcionales*: Paquetes que el autor sugiere tener instalados pero su inexistencia no afecta a la funcionalidad principal de la aplicación principal.
+
+En la @figure4 se puede observar una _grafo de dependencia_ que ejemplifica las diferentes categorías.
+
+#figure(
+  image("media/figures/Figure4.svg", width: 60%),
+  caption: [Grafo de dependencias de `tu aplicación`. Cada punto representa un paquete: Dependencias directas en amarillo, indirectas en azul y opcionales en rojo.]
+)<figure4>
+
+Otra clasificación de las librerías consta de como son referenciadas por la aplicación objetivo @Dolstra2006, esto parte de la naturaleza que últimamente para que un programa sea ejecutado debe ser traducido a instrucciones binarias que el procesador pueda comprender, incluyendo la fase de enlazado de librerias o _linking_ . Esta fase es conocida principalmente en `C` sin embargo, el _linking_ también es una labor hecha por otros lenguajes compilados, e interpretados; siendo en estos últimos una labor hecha en vivo por el interprete en vez de ser especificado en el ejecutable en sí. 
+
+==== Librerías Estáticas
+Siguiendo con el ejemplo de `C`, al compilar código fuente, el lenguajes produce un conjunto de _object_ files @StorySharedLibraries2026 
+
+==== Librerías Dinámicas
+
+Las clasificaciones desarrolladas no son las únicas, y diferentes ecosistemas introducen nuevos conceptos, como los paquetes _peer_ introducidos por `npm` @Gibb2026.
+
+=== Manejadores de paquetes al rescate <manejadores_de_paquetes>
+Después de los las secciones, debió quedar claro que la instalación de un aplicación y sus dependencias no es un problema trivial, pero no hay que temer, con el auge en la complejidad de manejo de paquetes también ha surgido una plétora de herramientas para aplacar derivada del tamaño de los proyectos.
 
 == Nix como solución
 
@@ -373,7 +407,6 @@ objetivo de desarrollar y evaluar un lenguaje de dominio específico embebido
 (eDSL, por sus siglas en inglés) en TypeScript como alternativa al lenguaje de
 configuración original de Nix (en adelante, Nixlang).
 
-\
 == Confidencialidad y Seguridad
 Todas las fases que involucran participantes humanos se rigen por los siguientes
 principios:
