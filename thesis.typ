@@ -362,43 +362,138 @@ El uso de código de terceros se ha convertido en una práctica extendida: en 20
   caption: [Grafo completo de dependencias de Firefox (21,295 paquetes, 37,926 relaciones `DEPENDS_ON`). Cada punto representa un paquete coloreado por ecosistema: `npm` en azul, `cargo` en naranja, `pypi` en verde y otros en gris; el punto negro central es el propio repositorio de Firefox.]
 )<figure3>
 
-La @figure3 revela *una característica esencial de los paquetes, y es que estos a su vez pueden depender de otros paquetes*; formando una _grafo de dependencias de softaware_, de paquetes conectados por vértices dirigidos que simbolizan relaciones `'dependen de'` @kikasStructureEvolutionPackage2017. Es esta estructura de datos la que muchos manejadores de paquetes utilizan para saber que instalar y en que orden @Gibb2026 y que se discutirá en la @manejadores_de_paquetes. Esta estructura a su vez nos puede ayudar a clasificar los diferentes tipos de paquetes.
+La @figure3 revela una característica esencial de los paquetes, y es que estos, a su vez, pueden depender de otros paquetes; formando un _grafo de dependencias de software_, donde paquetes son conectados por vértices dirigidos que simbolizan relaciones "depende de" @kikasStructureEvolutionPackage2017. Es esta estructura de datos la que muchos manejadores de paquetes utilizan para saber qué instalar y en qué orden @Gibb2026, como se discutirá en la @manejadores_de_paquetes. Esta misma estructura, además, permite clasificar los diferentes tipos de paquetes.
 
-=== Clasificacion de paquetes
-Los paquetes se pueden clasificar en base a su relación con el paquete principal (la aplicación que el usuario desea usar) @Gibb2026:
+=== Clasificación de paquetes
+
+Los paquetes se pueden clasificar según su relación con el paquete principal (la aplicación que el usuario desea usar) @Gibb2026:
 
 - *Directas*: Paquetes que el paquete principal declara explícitamente que necesita.
-- *Indirectas*: Paquetes que son dependencias de paquetes que no son el principal.
-- *Opcionales*: Paquetes que el autor sugiere tener instalados pero su inexistencia no afecta a la funcionalidad principal de la aplicación principal.
+- *Indirectas*: Paquetes que son, a su vez, dependencias de las dependencias directas, sin ser requeridos por el paquete principal.
+- *Opcionales*: Paquetes que el autor sugiere tener instalados, pero cuya ausencia no compromete la funcionalidad principal de la aplicación.
 
-En la @figure4 se puede observar una _grafo de dependencia_ que ejemplifica las diferentes categorías.
+En la @figure4 se puede observar un grafo de dependencias que ejemplifica las tres categorías.
 
 #figure(
   image("media/figures/Figure4.svg", width: 60%),
-  caption: [Grafo de dependencias de `tu aplicación`. Cada punto representa un paquete: Dependencias directas en amarillo, indirectas en azul y opcionales en rojo.]
+  caption: [Grafo de dependencias de `tu aplicación`. Cada punto representa un paquete: dependencias directas en amarillo, indirectas en azul y opcionales en rojo.]
 )<figure4>
 
-Otra clasificación de las librerías consta de como son referenciadas por la aplicación objetivo @Dolstra2006, esto parte de la naturaleza que últimamente para que un programa sea ejecutado debe ser traducido a instrucciones binarias que el procesador pueda comprender, incluyendo la fase de enlazado de librerias o _linking_ . Esta fase es conocida principalmente en `C` sin embargo, el _linking_ también es una labor hecha por otros lenguajes compilados, e interpretados; siendo en estos últimos una labor hecha en vivo por el interprete en vez de ser especificado en el ejecutable en sí. 
+Una segunda clasificación de los paquetes atiende a la forma en que son referenciados por la aplicación objetivo @Dolstra2006 @StorySharedLibraries2026. Esta distinción surge de la naturaleza misma de la ejecución de programas: para que un programa se ejecute, su código fuente debe traducirse a instrucciones binarias que el procesador pueda interpretar, proceso que incluye una fase de enlazado o _linking_, en la cual se resuelven las referencias que el programa hace a funciones y variables definidas en otros paquetes @StorySharedLibraries2026. Esta fase es especialmente visible en lenguajes como `C`, aunque el _linking_ también está presente en otros lenguajes compilados e interpretados; en estos últimos, sin embargo, la resolución ocurre en tiempo de ejecución, a cargo del intérprete, en lugar de quedar fijada de antemano en el ejecutable. Según el momento en que ocurre esta resolución, los paquetes que actúan como bibliotecas se clasifican en estáticos o dinámicos.
 
-==== Librerías Estáticas
-Siguiendo con el ejemplo de `C`, al compilar código fuente, el lenguajes produce un conjunto de _object_ files @StorySharedLibraries2026 
+==== Librerías estáticas
 
-==== Librerías Dinámicas
+// TODO: 
+Al compilar código fuente en `C`, el compilador traduce cada archivo fuente en un archivo objeto (_object file_), que contiene el código máquina de ese archivo junto con una tabla de símbolos aún sin resolver @StorySharedLibraries2026. Una *biblioteca estática* es, en esencia, un archivo (típicamente con extensión `.a` en sistemas Unix o `.lib` en Windows) que agrupa varios de estos archivos objeto mediante una herramienta archivadora, sin resolver todavía las referencias entre ellos.
 
-Las clasificaciones desarrolladas no son las únicas, y diferentes ecosistemas introducen nuevos conceptos, como los paquetes _peer_ introducidos por `npm` @Gibb2026.
+// TODO: 
+La resolución ocurre en la fase de enlazado: el _linker_ toma el ejecutable en construcción, identifica los símbolos que aún no están definidos y copia dentro del binario final únicamente los archivos objeto de la biblioteca que los proveen. El resultado es un ejecutable autocontenido, que no depende de que la biblioteca esté presente en la computadora donde se ejecuta.
+
+Esta característica trae ventajas y desventajas. A favor, el enlazado estático produce binarios portables y con un comportamiento predecible, ya que no existe la posibilidad de que, en tiempo de ejecución, se cargue una versión de la biblioteca distinta a la usada durante la compilación, y evita la sobrecarga de resolver símbolos cada vez que el programa se ejecuta @StorySharedLibraries2026. En contra, cada ejecutable que enlaza una misma biblioteca contiene su propia copia del código, lo que incrementa el tamaño en disco y el consumo de memoria cuando varios programas la usan simultáneamente, y obliga a recompilar y redistribuir cada ejecutable ante cualquier actualización o corrección de la biblioteca, incluidos parches de seguridad @StorySharedLibraries2026.
+
+==== Librerías dinámicas
+
+Las *bibliotecas dinámicas* (o compartidas, _shared libraries_; `.so` en Unix, `.dll` en Windows, `.dylib` en macOS) posponen la resolución de símbolos hasta el momento de carga o, incluso, hasta la primera vez que la función es invocada (_lazy binding_) @StorySharedLibraries2026. En lugar de copiar el código de la biblioteca dentro de cada ejecutable, el binario final solo almacena una referencia a ella; es el cargador dinámico del sistema operativo (_dynamic loader_) quien, al iniciar el programa, localiza la biblioteca en el sistema, la mapea en el espacio de memoria del proceso y completa las referencias pendientes mediante tablas de relocalización y código independiente de posición (_Position Independent Code_, PIC) @StorySharedLibraries2026.
+
+Esta indirección ofrece beneficios notables: el sistema operativo puede mantener una única copia de la biblioteca en memoria física y compartirla entre todos los procesos que la usan, reduciendo el consumo de RAM y el tamaño de los ejecutables en disco; además, una biblioteca puede corregirse o actualizarse sin necesidad de recompilar las aplicaciones que la consumen, siempre que se preserve su interfaz. Sin embargo, esta misma flexibilidad introduce el problema opuesto al de las bibliotecas estáticas: la aplicación depende de que, en la computadora donde se ejecute, exista una versión de la biblioteca compatible con la que se usó al compilarla, situación que puede derivar en conflictos cuando distintas aplicaciones del mismo sistema requieren versiones incompatibles entre sí, como se ilustró previamente en la @figura1.
+
+Las clasificaciones desarrolladas no son las únicas: distintos ecosistemas introducen conceptos adicionales, como los paquetes _peer_ que introduce `npm` @Gibb2026.
 
 === Manejadores de paquetes al rescate <manejadores_de_paquetes>
-Después de los las secciones, debió quedar claro que la instalación de un aplicación y sus dependencias no es un problema trivial, pero no hay que temer, con el auge en la complejidad de manejo de paquetes también ha surgido una plétora de herramientas para aplacar derivada del tamaño de los proyectos.
+
+De las secciones anteriores debió quedar claro que instalar una aplicación junto con sus dependencias no es un problema trivial. Ante el auge en la disponibilidad y uso de paquetes descrito previamente, también ha surgido una plétora de herramientas —los manejadores de paquetes— orientadas a administrar la creciente complejidad derivada del tamaño de los proyectos.
+
+==== Evolución y Taxonomía de los Modelos Existentes
+A partir de mediados de la década de 2000, se produjo lo que se ha descrito como una "explosión cámbrica" de soluciones, donde prácticamente cada sistema operativo y lenguaje de programación desarrolló su propia herramienta. Los modelos tradicionales pueden clasificarse bajo tres ejes principales:
+
+1.  *Por el tipo de artefacto (Binarios vs. Fuente):*
+    -   *Manejadores binarios (p. ej., APT, RPM, Pacman):* Descargan binarios precompilados de servidores centrales y los ubican en rutas específicas del sistema. Su ventaja es la velocidad, pero dependen de que el binario haya sido construido para una arquitectura y versión de sistema operativo exacta @Zwinger2026.
+    -   *Manejadores basados en fuentes (p. ej., BSD Ports, Portage de Gentoo):* Copian el código fuente y producen los binarios localmente @Zwinger2026. Esto permite una personalización extrema y optimización para el hardware, pero a costa de tiempos de despliegue significativamente mayores @Dolstra2006.
+
+2.  *Por el alcance del ecosistema (Sistema vs. Lenguaje):*
+    -   *Manejadores de sistema:* Administran el sistema operativo completo (p. ej., DNF para Red Hat, APT para Debian). Tienden a ser más conservadores, priorizando un conjunto de paquetes coordinado y coherente, lo que a menudo causa que las versiones de las librerías se retrasen respecto a las últimas novedades @Gibb2026.
+    -   *Manejadores de lenguaje:* Distribuyen librerías para desarrolladores de lenguajes específicos (p. ej., pip para Python, Cargo para Rust, npm para JavaScript). Priorizan la frescura de las versiones, pero suelen ignorar las dependencias externas del sistema (como drivers o librerías de C), asumiendo que estas ya están presentes @Gibb2026.
+
+3.  *Por la resolución de dependencias:*
+    La mayoría utiliza lenguajes de dominio específico (DSL) para describir las relaciones entre paquetes. La resolución de estas dependencias es un problema complejo que a menudo requiere algoritmos avanzados (SAT solvers) para encontrar un conjunto de versiones compatibles, un proceso que es inherentemente NP-completo @Gibb2026.
+
+==== El Problema de Fondo: El Paradigma Imperativo
+A pesar de su utilidad, los modelos tradicionales comparten un defecto estructural: operan bajo un *paradigma de despliegue imperativo* . En este modelo, las acciones de instalación o actualización se realizan "en el lugar" (_in-place_), modificando destructivamente el estado del sistema operativo @Courts2013. Esta mutación del entorno global conlleva problemas críticos que limitan la fiabilidad del software:
+
+-   *Conflictos de dependencias ("Dependency Hell"):* Al intentar satisfacer a múltiples aplicaciones en un entorno global único, surge el problema del "diamante de dependencias". Si la aplicación A requiere la versión 1.0 de una librería y la aplicación B requiere la 2.0, el sistema se ve forzado a elegir una sola, rompiendo potencialmente la otra aplicación @Zwinger2026.
+-   *Falta de Reproducibilidad:* Debido a que el proceso de construcción suele tener acceso a todo el software instalado en la máquina (entradas no declaradas), es común que un paquete se compile correctamente en una computadora pero falle en otra debido a sutiles diferencias en el entorno @Courts2013.
+-   *Actualizaciones destructivas y falta de reversión:* Dado que las actualizaciones sobrescriben archivos existentes, si un proceso falla a mitad de camino o la nueva versión es inestable, el sistema puede quedar en un estado inconsistente. No suele haber una forma sencilla de realizar un *rollback* atómico al estado anterior @Dolstra2006.
+-   *Fragmentación de herramientas:* Los proyectos multilingües modernos se ven obligados a coordinar múltiples manejadores de paquetes ad-hoc (p. ej., usar Cargo, pip y APT simultáneamente), lo que oculta vulnerabilidades de seguridad y dificulta el despliegue portátil @Gibb2026.
+
+==== Hacia un nuevo modelo
+La disyuntiva tradicional obligaba a elegir entre manejadores que arriesgan conflictos en el entorno global o soluciones de virtualización (contenedores) que evitan conflictos duplicando entornos completos a costa de almacenamiento y memoria @figura1. 
+
+En este contexto surge *Nix*, que propone una tercera vía: un *modelo de despliegue puramente funcional*. Nix busca fusionar la eficiencia de los manejadores de paquetes con el aislamiento de la virtualización, tratando el despliegue de software de forma análoga a la gestión de memoria en los lenguajes de programación, donde cada componente es inmutable y se identifica de forma unívoca por sus insumos exactos @Dolstra2006.
 
 == Nix como solución
+// TODO:
+//  
+//
 
-=== Intentos para mejorar Nix
+=== Problemas que resuelve
 
-== Experiencia de desarrollo
+El despliegue mediante manejadores de paquetes convencionales y mediante virtualización representa una disyuntiva: el primero fuerza a resolver un único conjunto de versiones compatibles para todo el sistema, arriesgando conflictos irresolubles entre aplicaciones (@figura1); el segundo evita el conflicto duplicando entornos completos, a costa de espacio en disco y memoria @Sobieraj2024 @Lingayat2018. Nix resuelve ambos problemas a la vez sin recurrir a un aislamiento a nivel de sistema operativo completo por aplicación: identifica cada paquete de forma única en función de sus insumos exactos y lo aísla lo suficiente para garantizar que su construcción sea reproducible, permitiendo que versiones distintas convivan y que las dependencias compartidas se reutilicen (@figura2) @Dolstra2006. El resto de esta sección detalla los mecanismos —Nix Store, hashes, derivaciones y ambientes aislados— que hacen esto posible, así como el lenguaje mediante el cual se describen.
 
-== Transpiladores
+=== Implementación
 
-=== Como se prueba su usabilidad
+==== Nix Store
+
+El *Nix Store* es el repositorio central donde Nix almacena el resultado de cada construcción —paquetes, bibliotecas, derivaciones y hasta archivos de configuración— en un subdirectorio propio dentro de `/nix/store`, que permanece inmutable una vez creado @Dolstra2006. Cada ruta dentro del store identifica de forma unívoca su contenido (@figura2), lo que permite que Nix trate al sistema operativo completo, en el caso de NixOS, como una colección de artefactos versionados dentro de esta misma estructura @Dolstra2008.
+
+==== Hashes (identificadores únicos)
+
+El nombre de cada ruta en el store combina un hash criptográfico —calculado sobre todos los insumos usados en la construcción del paquete: código fuente, dependencias, banderas de compilación y el propio script de construcción— con un nombre simbólico legible para humanos @Dolstra2006. Como el hash depende exclusivamente de esos insumos, dos construcciones con los mismos insumos producen exactamente el mismo hash y, por tanto, la misma ruta, sin importar en qué máquina se ejecuten; esta propiedad es la que permite sustituir binarios ya construidos entre computadoras distintas, y ha sido validada empíricamente reconstruyendo más de 700 mil paquetes de Nixpkgs con tasas de reproducibilidad binaria de entre 69% y 91% @Malka2025. Modificar cualquier insumo —incluida una dependencia transitiva— cambia, en cambio, el hash resultante y con él la ruta del paquete, de modo que las versiones antiguas nunca se sobrescriben.
+
+==== Derivaciones
+
+La unidad atómica de construcción en Nix es la *derivación*: una especificación —almacenada como un archivo `.drv` dentro del propio store— que describe qué construir, mediante qué programa constructor (_builder_), con qué argumentos y variables de entorno, y a partir de qué otras derivaciones o rutas del store como insumos @Dolstra2006. El lenguaje Nix es, en última instancia, un medio declarativo para describir y componer derivaciones: cualquier expresión Nix se evalúa hasta producir una o más derivaciones, que Nix realiza (_builds_) para obtener las rutas de salida correspondientes en el store. Al depender exclusivamente de sus insumos declarados, una derivación se comporta como una función pura —los mismos insumos producen siempre la misma salida—, propiedad que le da nombre al modelo: despliegue puramente funcional @Dolstra2006.
+
+==== Ambientes aislados (virtualización de sistemas de archivos)
+
+La pureza de una derivación no se logra por convención, sino que se impone técnicamente: Nix ejecuta cada construcción dentro de un ambiente aislado que restringe el sistema de archivos visible al _builder_ a únicamente las rutas del store declaradas como insumos, y deshabilita el acceso a la red salvo que la derivación lo declare explícitamente @Dolstra2006. Esta forma de virtualización, más ligera que la de una máquina o un contenedor completo, impide que dependencias no declaradas del sistema anfitrión —una biblioteca instalada globalmente, una variable de entorno, un archivo de configuración— se filtren silenciosamente en el resultado de la construcción, condición necesaria para que el hash calculado sea reproducible en cualquier otra máquina @Dolstra2006 @Malka2025.
+
+=== Lenguaje Nix
+
+Las derivaciones descritas anteriormente se expresan, en la práctica, mediante *Nixlang*: un lenguaje de dominio específico puro, funcional y de evaluación perezosa, con tipado dinámico y una sintaxis descrita en ocasiones como JSON con funciones @NixdevDocumentation. Estos dos últimos rasgos —el paradigma funcional y la evaluación perezosa— // TODO: 
+no son incidentales: son los que permiten que un archivo de configuración describa relaciones entre paquetes sin fijar un orden de evaluación ni un estado mutable, condición necesaria para que las derivaciones se comporten como funciones puras. Antes de examinar cómo estas propiedades inciden en la usabilidad de Nixlang, conviene precisar qué significan en términos de teoría de lenguajes de programación.
+
+== Fundamentos de lenguajes de programación
+
+Esta sección introduce tres nociones de diseño de lenguajes —el contraste entre paradigma imperativo y funcional, la evaluación perezosa y la noción de lenguaje de dominio específico— que sirven de base conceptual para analizar tanto Nixlang como el eDSL propuesto en este trabajo.
+
+=== Imperativo vs. funcional
+
+// TODO:
+En un lenguaje imperativo, un programa es una secuencia de instrucciones que modifican explícitamente el estado de la máquina —variables, registros, archivos— mediante asignaciones y efectos secundarios; es el modelo que siguen la mayoría de los lenguajes de propósito general (`C`, Python, JavaScript) y el que, según Dolstra @Dolstra2008, comparten los manejadores de paquetes y las herramientas de gestión de configuración tradicionales, cuyas actualizaciones sobrescriben destructivamente el estado del sistema. En un lenguaje funcional, en cambio, un programa se construye componiendo funciones matemáticas puras sobre valores inmutables: dada la misma entrada, una función siempre produce la misma salida, sin alterar ningún estado externo, propiedad conocida como transparencia referencial @Hudak1989. Es precisamente esta noción, trasladada del diseño de lenguajes al despliegue de software, la que origina el modelo de Nix descrito en la sección anterior: una derivación se comporta como una función pura porque el lenguaje que la describe fue diseñado, desde su base, con esa misma disciplina.
+
+=== Laziness
+
+La evaluación perezosa (_lazy evaluation_) pospone el cómputo de una expresión hasta el momento en que su valor es efectivamente requerido, en contraste con la evaluación estricta (_eager_), que calcula cada expresión tan pronto como es posible @Hudak1989. Nixlang hereda esta propiedad de su linaje funcional: un atributo dentro de un archivo de configuración puede referenciar a otro definido más adelante, o incluso a sí mismo de forma indirecta, sin provocar un ciclo infinito, siempre que exista un punto fijo que Nix pueda resolver perezosamente. Esta característica habilita patrones extendidos en el ecosistema, como los _overlays_ que modifican paquetes ya definidos, pero también introduce un modelo mental —la ausencia de un orden de evaluación explícito— ajeno a la mayoría de los lenguajes imperativos con los que suelen familiarizarse primero los nuevos usuarios.
+
+=== DSL & eDSL
+
+Un *lenguaje de dominio específico* (DSL) es un lenguaje diseñado para un dominio de aplicación particular que, a cambio de renunciar a la generalidad de un lenguaje de propósito general (GPL), ofrece en teoría mayor expresividad y facilidad de uso dentro de ese dominio @Mernik2005 @vandeursenDomainspecificLanguagesAnnotated2000; Nixlang, orientado exclusivamente a describir derivaciones, es un ejemplo de ello. Un *lenguaje de dominio específico embebido* (eDSL) persigue el mismo objetivo, pero en lugar de implementarse desde cero reutiliza la sintaxis, el analizador y el ecosistema de herramientas de un lenguaje anfitrión de propósito general @berzakEmbeddedDomainSpecific. GNU Guix ilustra este enfoque dentro del propio linaje de Nix: en vez de un lenguaje propio, describe sus paquetes mediante un eDSL sobre Scheme, heredando así el resto del lenguaje anfitrión sin comprometer la expresividad del dominio @Courts2013.
+
+La promesa de un DSL o eDSL —mayor expresividad y facilidad de uso— es, sin embargo, una afirmación empírica y no una garantía de diseño; determinar si se cumple requiere instrumentos capaces de medir la usabilidad de un lenguaje, tema que se desarrolla en la siguiente sección.
+
+== Usabilidad en lenguajes de programación
+
+=== Cómo se mide en la actualidad (todo empírico)
+
+La usabilidad de un lenguaje de programación no se demuestra por argumento de diseño, sino que se mide: la funcionalidad de una herramienta no garantiza que sea utilizable, ni siquiera que llegue a usarse @goodwinFunctionalityUsability1987. Bajo la premisa de que los programadores son, ante todo, usuarios de sus herramientas @Myers2016a, la literatura adapta métodos propios de la interacción humano-computadora para evaluarlos empíricamente: experimentos controlados que comparan directamente el efecto de una característica del lenguaje sobre tareas de mantenimiento o comprensión, como el de Hanenberg et al. @hanenbergEmpiricalStudyImpact2013 sobre tipado estático; estudios de programación natural, que documentan cómo personas sin experiencia previa expresan intuitivamente una solución antes de aprender la sintaxis de un lenguaje @paneStudyingLanguageStructure2001 @panePDFMoreNatural2006; el protocolo de pensar en voz alta, que expone el razonamiento del usuario mientras resuelve una tarea @PDFThinkAloud; y marcos analíticos como las Dimensiones Cognitivas de las Notaciones, que descomponen un lenguaje en atributos evaluables y comparables entre sí @PDFCognitiveDimensions @PDFComparisonXAML2026. A estos métodos centrados en la tarea se suma el campo de la Experiencia de Desarrollo (DX), que incorpora instrumentos de experiencia de usuario —como DEXI @Kuusinen2016— para capturar también la dimensión subjetiva de usar una herramienta, no solo su desempeño medible.
+
+=== Los proyectos OSS ignoran estos aspectos
+
+Esta caja de herramientas empíricas, sin embargo, rara vez se aplica dentro de los proyectos de código abierto. Nichols et al. @Nichols2001, en uno de los primeros estudios de usabilidad sobre un proyecto OSS, documentan que el propio proceso de desarrollo distribuido y guiado por voluntarios tiende a relegar la usabilidad frente a la funcionalidad. Dos décadas después, Llerena et al. @Llerena2025 encuentran el mismo patrón: de tres proyectos OSS estudiados, ninguno adoptaba sistemáticamente técnicas de evaluación de usabilidad, obstaculizados en buena medida por la escasa participación de usuarios finales en el proceso. Leroux @Leroux2019 atribuye parte de esta brecha a una cuestión de poder dentro de las comunidades OSS: quienes practican la usabilidad rara vez tienen la autoridad —o el mandato— para imponer cambios sobre el diseño técnico del proyecto. Nix, desarrollado y mantenido bajo este mismo modelo, no es la excepción: los problemas de documentación, errores y curva de aprendizaje señalados en la Justificación de este trabajo son consistentes con la ausencia de una práctica sistemática de evaluación de usabilidad, más que con una limitación inherente al enfoque puramente funcional.
+
+=== Metodología para medir la usabilidad en lenguajes
+
+Comparar la usabilidad de dos lenguajes exige combinar más de uno de estos métodos: una fase exploratoria y cualitativa, que identifique los problemas específicos de un lenguaje antes de proponer una alternativa, mediante pensar en voz alta y programación natural @PDFThinkAloud @paneStudyingLanguageStructure2001; y una fase comparativa y cuantitativa, que contraste el lenguaje original contra la alternativa propuesta bajo condiciones controladas. Para esta última, Mernik y otros han adaptado el marco de Dimensiones Cognitivas específicamente a la comparación de lenguajes y notaciones @PDFComparisonXAML2026, mientras que el marco Usa-DSL extiende esa misma lógica al caso particular de los DSL @Poltronieri2018; ambos se complementan con instrumentos de experiencia de usuario y de desarrollo —AttrakDiff @PDFNeedsAffect, DEXI @Kuusinen2016— para capturar la dimensión subjetiva que las métricas de desempeño, por sí solas, no reflejan. Esta combinación de métodos —exploración cualitativa seguida de comparación cuantitativa mediante Dimensiones Cognitivas y experiencia de usuario— estructura, precisamente, la metodología de este trabajo, descrita en el siguiente capítulo.
 
 = Metodología
 
